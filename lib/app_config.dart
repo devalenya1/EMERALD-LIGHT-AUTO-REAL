@@ -17,7 +17,7 @@ class AppConfig {
   //configure this
   static const bool HTTPS = true;
 
-  static const DOMAIN_PATH = "airsoftauctions.co.uk"; //airsoftauctions.co.uk  emeraldlightauto.uk
+  static const DOMAIN_PATH = "emeraldlightauto.uk"; //airsoftauctions.co.uk  emeraldlightauto.uk
 
   //do not configure these below
   static const String API_ENDPATH = "api/v2";
