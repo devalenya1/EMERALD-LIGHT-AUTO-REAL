@@ -10,7 +10,7 @@ import 'package:active_ecommerce_flutter/helpers/system_config.dart';
 import 'package:active_ecommerce_flutter/repositories/api-request.dart';
 
 import '../data_model/variant_price_response.dart';
-
+ 
 class ProductRepository {
   Future<CatResponse> getCategoryRes() async {
     String url = ("${AppConfig.BASE_URL}/seller/products/categories");
@@ -137,13 +137,27 @@ class ProductRepository {
     return productMiniResponseFromJson(response.body);
   }
 
-  Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
-    String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
-    print("Product Url");
+  // Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
+  //   String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
+  //   print("Product Url");
 
-    // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
-    //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
-    //   print(url.toString());
+  //   // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
+  //   //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
+  //   //   print(url.toString());
+  //   final response = await ApiRequest.get(url: url, headers: {
+  //     "App-Language": app_language.$!,
+  //   });
+  //   print(response.body);
+
+  //   return productDetailsResponseFromJson(response.body);
+  // }
+
+
+
+  Future<ProductDetailsResponse> getProductDetails({@required int id = 0, int user_id = 0}) async {
+      String url = ("${AppConfig.BASE_URL}/products/" + id.toString() + user_id.toString());
+      print(url.toString());
+      
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
@@ -151,6 +165,7 @@ class ProductRepository {
 
     return productDetailsResponseFromJson(response.body);
   }
+
 
   Future<ProductDetailsResponse> getDigitalProductDetails({int id = 0}) async {
     String url = ("${AppConfig.BASE_URL}/products/" + id.toString());

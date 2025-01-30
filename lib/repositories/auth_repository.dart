@@ -16,15 +16,15 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
-  Future<LoginResponse> getLoginResponse(String? email, String password,String loginBy) async {
+  Future<LoginResponse> getLoginResponse(String? email, String password, String loginBy) async {
     var post_body = jsonEncode({
       "email": "${email}",
       "password": "$password",
       "identity_matrix": AppConfig.purchase_code,
       "login_by":loginBy
     });
-
-    String url = ("${AppConfig.BASE_URL}/auth/login");
+ 
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/login");
     final response = await ApiRequest.post(
         url: url,
         headers: {
@@ -57,7 +57,7 @@ class AuthRepository {
     });
 
     // print(post_body);
-    String url = ("${AppConfig.BASE_URL}/auth/social-login");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/social-login");
     final response = await ApiRequest.post(
         url: url,
         headers: {
@@ -71,7 +71,7 @@ class AuthRepository {
   }
 
   Future<LogoutResponse> getLogoutResponse() async {
-    String url = ("${AppConfig.BASE_URL}/auth/logout");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/logout");
     final response = await ApiRequest.get(
       url: url,
       headers: {
@@ -86,7 +86,7 @@ class AuthRepository {
   }
 
   Future<CommonResponse> getAccountDeleteResponse() async {
-    String url = ("${AppConfig.BASE_URL}/auth/account-deletion");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/account-deletion");
 
     // print(url.toString());
 
@@ -119,7 +119,7 @@ class AuthRepository {
       "g-recaptcha-response": "$capchaKey",
     });
 
-    String url = ("${AppConfig.BASE_URL}/auth/signup");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/signup");
     final response = await ApiRequest.post(
         url: url,
         headers: {
@@ -132,7 +132,7 @@ class AuthRepository {
   }
 
   Future<ResendCodeResponse> getResendCodeResponse() async {
-    String url = ("${AppConfig.BASE_URL}/auth/resend_code");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/resend_code");
     final response = await ApiRequest.get(
         url: url,
         headers: {
@@ -146,7 +146,7 @@ class AuthRepository {
   Future<ConfirmCodeResponse> getConfirmCodeResponse(String verification_code) async {
     var post_body = jsonEncode({ "verification_code": "$verification_code"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/confirm_code");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/confirm_code");
     // print(url);
     // print(post_body);
     final response = await ApiRequest.post(
@@ -166,7 +166,7 @@ class AuthRepository {
     var post_body = jsonEncode(
         {"email_or_phone": "$email_or_phone", "send_code_by": "$send_code_by"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/password/forget_request");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/password/forget_request");
 
     // print(url.toString());
     // print(post_body.toString());
@@ -186,7 +186,7 @@ class AuthRepository {
     var post_body = jsonEncode(
         {"verification_code": "$verification_code", "password": "$password"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/password/confirm_reset");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/password/confirm_reset");
     final response = await ApiRequest.post(url:url,
         headers: {
           "Content-Type": "application/json",
@@ -202,7 +202,7 @@ class AuthRepository {
     var post_body = jsonEncode(
         {"email_or_code": "$email_or_code", "verify_by": "$verify_by"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/password/resend_code");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/password/resend_code");
     final response = await ApiRequest.post(url:url,
         headers: {
           "Content-Type": "application/json",
@@ -216,7 +216,7 @@ class AuthRepository {
   Future<LoginResponse> getUserByTokenResponse() async {
     var post_body = jsonEncode({"access_token": "${access_token.$}"});
 
-    String url = ("${AppConfig.BASE_URL}/auth/info");
+    String url = ("${AppConfig.RAW_BASE_URL}/auth/info");
     if (access_token.$!.isNotEmpty) {
       final response = await ApiRequest.post(url:url,
           headers: {
