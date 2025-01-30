@@ -304,7 +304,6 @@ class _ProductDetailsState extends State<ProductDetails>
 
     var variantResponse = await ProductRepository().getVariantWiseInfo(
         slug: widget.slug,
-        id: widget.id,
         color: color_string,
         variants: _choiceString,
         qty: _quantity);
@@ -433,7 +432,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Vehicle Loan",
                   );
                 }));
-            },
+            }
       } else if (mode == 'buy') { 
             onTap: () {
               Navigator.push(context,
@@ -444,7 +443,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Contact Dealer",
                   );
                 }));
-            },
+            }
       } else if (mode == 'insure') {
             onTap: () {
               Navigator.push(context,
@@ -455,7 +454,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Insurance",
                   );
                 }));
-            },
+            }
       }
 
     }
@@ -2206,7 +2205,7 @@ class _ProductDetailsState extends State<ProductDetails>
   }
   
   
-  Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
+  Widget buildBottomAppBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: MyTheme.white.withOpacity(0.9),
       items: [
@@ -2215,7 +2214,7 @@ class _ProductDetailsState extends State<ProductDetails>
           label: '',
           icon: InkWell(
             onTap: () {
-              onPressBuyNow(context, _addedToCartSnackbar);
+              onPressBuyNow(context);
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -2252,7 +2251,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              onPressInsureNow(context, _addedToCartSnackbar);
+              onPressInsureNow(context);
             },
           
             child: Container(
@@ -2289,7 +2288,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              onPressLendingNow(context, _addedToCartSnackbar);
+              onPressLendingNow(context);
             },
           
             child: Container(
