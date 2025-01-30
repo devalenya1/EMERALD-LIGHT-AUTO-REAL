@@ -158,7 +158,7 @@ class ProductRepository {
       String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
       print(url.toString());
       
-    final response = await http.get(url: url, headers: {
+    final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
     print(response.body);
