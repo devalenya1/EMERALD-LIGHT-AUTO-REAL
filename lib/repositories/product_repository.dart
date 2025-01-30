@@ -154,7 +154,7 @@ class ProductRepository {
 
 
 
-  Future<ProductDetailsResponse> getProductDetails({@required int id = 0, int user_id = 0}) async {
+  Future<ProductDetailsResponse> getProductDetails({int id = 0, int user_id = 0}) async {
       String url = ("${AppConfig.BASE_URL}/products/" + id.toString() + user_id.toString());
       print(url.toString());
       

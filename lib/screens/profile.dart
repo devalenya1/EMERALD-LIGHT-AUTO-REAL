@@ -1,9 +1,11 @@
-import 'dart:async';
+import 'dart:async'; 
+import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/aiz_route.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/btn.dart';
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/custom/lang_text.dart';
+import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -328,7 +330,7 @@ class _ProfileState extends State<Profile> {
           buildBottomVerticalCardListItem("assets/download.png",
               LangText(context).local.user_verification_web, 
             
-            onTap: () {
+            onPressed: () {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(

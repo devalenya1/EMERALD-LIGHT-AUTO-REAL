@@ -174,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   fetchProductDetails() async {
     var productDetailsResponse =
-        await ProductRepository().getProductDetails(slug: widget.slug);
+        await ProductRepository().getProductDetails(id: widget.id);
 
     if (productDetailsResponse.detailed_products!.length > 0) {
       _productDetails = productDetailsResponse.detailed_products![0];
@@ -2184,7 +2184,8 @@ class _ProductDetailsState extends State<ProductDetails>
       ],
     );
   }
-
+  
+  if (is_logged_in.$) {
   Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
     return BottomNavigationBar(
       backgroundColor: MyTheme.white.withOpacity(0.9),
@@ -2193,18 +2194,138 @@ class _ProductDetailsState extends State<ProductDetails>
           backgroundColor: Colors.transparent,
           label: '',
           icon: InkWell(
-          if (is_logged_in.$) 
+          
+            onTap: () {
+              onPressAddToCart(context, _addedToCartSnackbar);
+            },
+          
+            child: Container(
+              margin: EdgeInsets.only(
+                left: 8,
+                right: 8,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: MyTheme.accent_color,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyTheme.accent_color_shadow,
+                    blurRadius: 20,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              height: 50,
+              child: Center(
+                child: Text("Buy",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Colors.transparent,
+          label: '',
+          icon: InkWell( 
             onTap: () {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&${_productDetails!.id!}&email=${user_email.$}",
-                        page_name: "Buy Vehicle",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
+                        page_name: "Apply for Insurance",
                   );
                 }));
             },
-           else 
+          
+            child: Container(
+              margin: EdgeInsets.only(
+                left: 8,
+                right: 8,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: MyTheme.accent_color,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyTheme.accent_color_shadow,
+                    blurRadius: 20,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              height: 50,
+              child: Center(
+                child: Text("Insure",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+        ),
+        BottomNavigationBarItem(
+          label: "",
+          icon: InkWell( 
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
+                        page_name: "Apply for Vehicle Loan",
+                  );
+                }));
+            },
+          
+            child: Container(
+              margin: EdgeInsets.only(left: 18, right: 18),
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: MyTheme.golden,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyTheme.golden_shadow,
+                    blurRadius: 20,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              child: Center(
+                child: Text("Lending",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  } else {
+  Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
+    return BottomNavigationBar(
+      backgroundColor: MyTheme.white.withOpacity(0.9),
+      items: [
+        BottomNavigationBarItem(
+          backgroundColor: Colors.transparent,
+          label: '',
+          icon: InkWell(
+          
             onTap: () {
               onPressAddToCart(context, _addedToCartSnackbar);
             },
@@ -2242,18 +2363,7 @@ class _ProductDetailsState extends State<ProductDetails>
           backgroundColor: Colors.transparent,
           label: '',
           icon: InkWell(
-          if (is_logged_in.$) 
-            onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
-                        page_name: "Apply for Insurance",
-                  );
-                }));
-            },
-           else 
+          
             onTap: () {
               onPressAddToCart(context, _addedToCartSnackbar);
             },
@@ -2290,18 +2400,7 @@ class _ProductDetailsState extends State<ProductDetails>
         BottomNavigationBarItem(
           label: "",
           icon: InkWell(
-          if (is_logged_in.$) 
-            onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
-                        page_name: "Apply for Vehicle Loan",
-                  );
-                }));
-            },
-           else 
+           
             onTap: () {
               onPressAddToCart(context, _addedToCartSnackbar);
             },
@@ -2332,29 +2431,10 @@ class _ProductDetailsState extends State<ProductDetails>
             ),
           ),
         )
-        /*Container(
-          color: Colors.white.withOpacity(0.95),
-          height: 83,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-
-              SizedBox(
-                width: 14,
-              ),
-
-              SizedBox(
-                width: 18,
-              ),
-            ],
-          ),
-        )*/
       ],
     );
   }
+}
 
   buildRatingAndWishButtonRow() {
     return Row(
