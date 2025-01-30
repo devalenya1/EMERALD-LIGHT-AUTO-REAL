@@ -154,11 +154,11 @@ class ProductRepository {
 
 
 
-  Future<ProductDetailsResponse> getProductDetails({String? slug = "", int user_id = 0}) async {
+  Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
       String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
       print(url.toString());
       
-    final response = await ApiRequest.get(url: url, headers: {
+    final response = await http.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
     print(response.body);

@@ -25,7 +25,7 @@ class AuthRepository {
     });
  
     String url = ("${AppConfig.RAW_BASE_URL}/auth/login");
-    final response = await ApiRequest.post(
+    final response = await http.post(
         url: url,
         headers: {
           "Accept": "*/*",
@@ -58,7 +58,7 @@ class AuthRepository {
 
     // print(post_body);
     String url = ("${AppConfig.RAW_BASE_URL}/auth/social-login");
-    final response = await ApiRequest.post(
+    final response = await http.post(
         url: url,
         headers: {
           "Content-Type": "application/json",

@@ -2212,8 +2212,8 @@ class _ProductDetailsState extends State<ProductDetails>
             },
             child: Container(
               margin: EdgeInsets.only(
-                left: 8,
-                right: 8,
+                left: 7,
+                right: 7,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -2250,8 +2250,8 @@ class _ProductDetailsState extends State<ProductDetails>
           
             child: Container(
               margin: EdgeInsets.only(
-                left: 8,
-                right: 8,
+                left: 0,
+                right: 0,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -2286,7 +2286,10 @@ class _ProductDetailsState extends State<ProductDetails>
             },
           
             child: Container(
-              margin: EdgeInsets.only(left: 18, right: 18),
+              margin: EdgeInsets.only(
+                left: 7, 
+                right: 7
+              ),
               height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
