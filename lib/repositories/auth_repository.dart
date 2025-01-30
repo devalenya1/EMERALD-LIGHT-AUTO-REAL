@@ -20,7 +20,7 @@ class AuthRepository {
     var post_body = jsonEncode({
       "email": "${email}",
       "password": "$password",
-      "identity_matrix": AppConfig.purchase_code,
+      // "identity_matrix": AppConfig.purchase_code,
       "login_by":loginBy
     });
  
