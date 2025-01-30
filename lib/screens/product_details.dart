@@ -174,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   fetchProductDetails() async {
     var productDetailsResponse =
-        await ProductRepository().getProductDetails(id: widget.id);
+        await ProductRepository().getProductDetails(slug: widget.slug);
 
     if (productDetailsResponse.detailed_products!.length > 0) {
       _productDetails = productDetailsResponse.detailed_products![0];
@@ -304,6 +304,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
     var variantResponse = await ProductRepository().getVariantWiseInfo(
         slug: widget.slug,
+        id: widget.id,
         color: color_string,
         variants: _choiceString,
         qty: _quantity);
@@ -393,27 +394,24 @@ class _ProductDetailsState extends State<ProductDetails>
     fetchAndSetVariantWiseInfo();
   }
 
-  onPressAddToCart(context, snackbar) {
-    addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
+  onPressLendingNow(context) {
+    addToCart(mode: "lending", context: context);
   }
 
   onPressBuyNow(context) {
-    addToCart(mode: "buy_now", context: context);
+    addToCart(mode: "buy", context: context);
   }
+
+  onPressInsureNow(context) {
+    addToCart(mode: "insure", context: context);
+  }
+
 
   addToCart({mode, BuildContext? context, snackbar = null}) async {
     if (is_logged_in.$ == false) {
-      // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-      //     gravity: Toast.center, duration: Toast.lengthLong);
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
       context?.go("/users/login");
       return;
     }
-
-    // print(widget.slug);
-    // print(_variant);
-    // print(user_id.$);
-    // print(_quantity);
 
     var cartAddResponse = await CartRepository().getCartAddResponse(
         _productDetails!.id, _variant, user_id.$, _quantity);
@@ -425,19 +423,41 @@ class _ProductDetailsState extends State<ProductDetails>
     } else {
       Provider.of<CartCounter>(context!, listen: false).getCount();
 
-      if (mode == "add_to_cart") {
-        if (snackbar != null && context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-        }
-        reset();
-        fetchAll();
-      } else if (mode == 'buy_now') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Cart(has_bottomnav: false);
-        })).then((value) {
-          onPopped(value);
-        });
+      if (mode == "lending") { 
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Vehicle Loan",
+                  );
+                }));
+            },
+      } else if (mode == 'buy') { 
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Contact Dealer",
+                  );
+                }));
+            },
+      } else if (mode == 'insure') {
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));
+            },
       }
+
     }
   }
 
@@ -2185,7 +2205,7 @@ class _ProductDetailsState extends State<ProductDetails>
     );
   }
   
-  if (is_logged_in.$) {
+  
   Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
     return BottomNavigationBar(
       backgroundColor: MyTheme.white.withOpacity(0.9),
@@ -2194,142 +2214,9 @@ class _ProductDetailsState extends State<ProductDetails>
           backgroundColor: Colors.transparent,
           label: '',
           icon: InkWell(
-          
             onTap: () {
-              onPressAddToCart(context, _addedToCartSnackbar);
+              onPressBuyNow(context, _addedToCartSnackbar);
             },
-          
-            child: Container(
-              margin: EdgeInsets.only(
-                left: 8,
-                right: 8,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                color: MyTheme.accent_color,
-                boxShadow: [
-                  BoxShadow(
-                    color: MyTheme.accent_color_shadow,
-                    blurRadius: 20,
-                    spreadRadius: 0.0,
-                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
-                  )
-                ],
-              ),
-              height: 50,
-              child: Center(
-                child: Text("Buy",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Colors.transparent,
-          label: '',
-          icon: InkWell( 
-            onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
-                        page_name: "Apply for Insurance",
-                  );
-                }));
-            },
-          
-            child: Container(
-              margin: EdgeInsets.only(
-                left: 8,
-                right: 8,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                color: MyTheme.accent_color,
-                boxShadow: [
-                  BoxShadow(
-                    color: MyTheme.accent_color_shadow,
-                    blurRadius: 20,
-                    spreadRadius: 0.0,
-                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
-                  )
-                ],
-              ),
-              height: 50,
-              child: Center(
-                child: Text("Insure",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: "",
-          icon: InkWell( 
-            onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
-                        page_name: "Apply for Vehicle Loan",
-                  );
-                }));
-            },
-          
-            child: Container(
-              margin: EdgeInsets.only(left: 18, right: 18),
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
-                color: MyTheme.golden,
-                boxShadow: [
-                  BoxShadow(
-                    color: MyTheme.golden_shadow,
-                    blurRadius: 20,
-                    spreadRadius: 0.0,
-                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
-                  )
-                ],
-              ),
-              child: Center(
-                child: Text("Lending",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  } else {
-  Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
-    return BottomNavigationBar(
-      backgroundColor: MyTheme.white.withOpacity(0.9),
-      items: [
-        BottomNavigationBarItem(
-          backgroundColor: Colors.transparent,
-          label: '',
-          icon: InkWell(
-          
-            onTap: () {
-              onPressAddToCart(context, _addedToCartSnackbar);
-            },
-          
             child: Container(
               margin: EdgeInsets.only(
                 left: 8,
@@ -2365,7 +2252,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              onPressAddToCart(context, _addedToCartSnackbar);
+              onPressInsureNow(context, _addedToCartSnackbar);
             },
           
             child: Container(
@@ -2402,7 +2289,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              onPressAddToCart(context, _addedToCartSnackbar);
+              onPressLendingNow(context, _addedToCartSnackbar);
             },
           
             child: Container(
@@ -2434,7 +2321,6 @@ class _ProductDetailsState extends State<ProductDetails>
       ],
     );
   }
-}
 
   buildRatingAndWishButtonRow() {
     return Row(
