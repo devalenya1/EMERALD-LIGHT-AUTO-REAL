@@ -2199,7 +2199,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL}/vehicle/buy?type=buy&${_productDetails!.id!}&email=${user_email.$}",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&${_productDetails!.id!}&email=${user_email.$}",
                         page_name: "Buy Vehicle",
                   );
                 }));
@@ -2248,7 +2248,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
                         page_name: "Apply for Insurance",
                   );
                 }));
@@ -2296,7 +2296,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
                         page_name: "Apply for Vehicle Loan",
                   );
                 }));

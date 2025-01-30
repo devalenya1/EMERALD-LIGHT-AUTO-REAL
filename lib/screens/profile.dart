@@ -333,7 +333,7 @@ class _ProfileState extends State<Profile> {
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL}/user/verification?type=verification&email=${user_email.$}",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/user/verification?type=verification&email=${user_email.$}",
                         page_name: "Verification Status",
                   );
                 }));
