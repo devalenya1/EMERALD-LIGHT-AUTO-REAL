@@ -47,8 +47,11 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "emerald.light.auto"
+        compileSdkVersion 34
+        targetSdkVersion 34
         minSdkVersion 21
-        targetSdkVersion 33
+        // minSdkVersion 21
+        // targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
