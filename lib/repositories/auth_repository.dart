@@ -25,7 +25,7 @@ class AuthRepository {
     // });
  
     String url = ("${AppConfig.RAW_BASE_URL}/my/login?email=${email}&password=$password&login_by=$loginBy");
-    final response = await ApiRequest.post(
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Accept": "*/*",
@@ -59,7 +59,7 @@ class AuthRepository {
 
     // print(post_body);
     String url = ("${AppConfig.RAW_BASE_URL}/my/social-login?name=${name}&email=${email}&provider=$provider&social_provider=$social_provider&access_token=$access_token&secret_token=$secret_token");
-    final response = await ApiRequest.post(
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ class AuthRepository {
     // });
 
     String url = ("${AppConfig.RAW_BASE_URL}/my/signup?name=$name&email_or_phone=${email_or_phone}&password=$password&password_confirmation=${passowrd_confirmation}&register_by=$register_by&g-recaptcha-response=$capchaKey");
-    final response = await ApiRequest.post(
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Content-Type": "application/json",
@@ -151,7 +151,7 @@ class AuthRepository {
     String url = ("${AppConfig.RAW_BASE_URL}/my/confirm_code?verification_code=$verification_code");
     // print(url);
     // print(post_body);
-    final response = await ApiRequest.post(
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Content-Type": "application/json",
@@ -172,7 +172,7 @@ class AuthRepository {
     String url = ("${AppConfig.RAW_BASE_URL}/my/password/forget_request?email_or_phone=${email_or_phone}&send_code_by=$send_code_by");
 
 
-    final response = await ApiRequest.post(url:url,
+    final response = await ApiRequest.get(url:url,
         headers: {
           "Content-Type": "application/json",
           "App-Language": app_language.$!,
@@ -189,7 +189,7 @@ class AuthRepository {
     //     {"verification_code": "$verification_code", "password": "$password"});
 
     String url = ("${AppConfig.RAW_BASE_URL}/my/password/confirm_reset?verification_code=$verification_code&password=$password");
-    final response = await ApiRequest.post(url:url,
+    final response = await ApiRequest.get(url:url,
         headers: {
           "Content-Type": "application/json",
           "App-Language": app_language.$!,
@@ -206,7 +206,7 @@ class AuthRepository {
     //     {"email_or_code": "$email_or_code", "verify_by": "$verify_by"});
 
     String url = ("${AppConfig.RAW_BASE_URL}/my/password/resend_code?email_or_code=${email_or_code}&verify_by=$verify_by");
-    final response = await ApiRequest.post(url:url,
+    final response = await ApiRequest.get(url:url,
         headers: {
           "Content-Type": "application/json",
           "App-Language": app_language.$!,
@@ -222,12 +222,13 @@ class AuthRepository {
 
     String url = ("${AppConfig.RAW_BASE_URL}/my/info?access_token=${access_token.$}");
     if (access_token.$!.isNotEmpty) {
-      final response = await ApiRequest.post(url:url,
+      final response = await ApiRequest.get(url:url,
           headers: {
             "Content-Type": "application/json",
             "App-Language": app_language.$!,
           },
-          body: post_body);
+          // body: post_body
+          );
 
       return loginResponseFromJson(response.body);
     }
