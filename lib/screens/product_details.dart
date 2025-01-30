@@ -1,6 +1,8 @@
 import 'dart:async';
  
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
+import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/btn.dart';
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
@@ -886,48 +888,48 @@ class _ProductDetailsState extends State<ProductDetails>
                                     fontWeight: FontWeight.bold),
                               ))),
                       Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Cart(has_bottomnav: false);
-                          })).then((value) {
-                            onPopped(value);
-                          });
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          padding: EdgeInsets.all(8),
-                          child: badges.Badge(
-                            badgeStyle: badges.BadgeStyle(
-                              shape: badges.BadgeShape.circle,
-                              badgeColor: MyTheme.accent_color,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            badgeAnimation: badges.BadgeAnimation.slide(
-                              toAnimate: true,
-                            ),
-                            stackFit: StackFit.loose,
-                            child: Image.asset(
-                              "assets/cart.png",
-                              color: MyTheme.dark_font_grey,
-                              height: 16,
-                            ),
-                            badgeContent: Consumer<CartCounter>(
-                              builder: (context, cart, child) {
-                                return Text(
-                                  "${cart.cartCounter}",
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Navigator.push(context,
+                      //         MaterialPageRoute(builder: (context) {
+                      //       return Cart(has_bottomnav: false);
+                      //     })).then((value) {
+                      //       onPopped(value);
+                      //     });
+                      //   },
+                      //   child: Container(
+                      //     decoration:
+                      //         BoxDecorations.buildCircularButtonDecoration_1(),
+                      //     width: 36,
+                      //     height: 36,
+                      //     padding: EdgeInsets.all(8),
+                      //     child: badges.Badge(
+                      //       badgeStyle: badges.BadgeStyle(
+                      //         shape: badges.BadgeShape.circle,
+                      //         badgeColor: MyTheme.accent_color,
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       badgeAnimation: badges.BadgeAnimation.slide(
+                      //         toAnimate: true,
+                      //       ),
+                      //       stackFit: StackFit.loose,
+                      //       child: Image.asset(
+                      //         "assets/cart.png",
+                      //         color: MyTheme.dark_font_grey,
+                      //         height: 16,
+                      //       ),
+                      //       badgeContent: Consumer<CartCounter>(
+                      //         builder: (context, cart, child) {
+                      //           return Text(
+                      //             "${cart.cartCounter}",
+                      //             style: TextStyle(
+                      //                 fontSize: 12, color: Colors.white),
+                      //           );
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(width: 15),
                       InkWell(
                         onTap: () {
@@ -988,7 +990,7 @@ class _ProductDetailsState extends State<ProductDetails>
                               EdgeInsets.only(top: 14, left: 14, right: 14),
                           child: _productDetails != null
                               ? Text(
-                                  _productDetails!.name!,
+                                  _productDetails!.name!, 
                                   style: TextStyles.smallTitleTexStyle(),
                                   maxLines: 2,
                                 )
@@ -2191,13 +2193,26 @@ class _ProductDetailsState extends State<ProductDetails>
           backgroundColor: Colors.transparent,
           label: '',
           icon: InkWell(
+          if (is_logged_in.$) 
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL}/vehicle/buy?type=buy&${_productDetails!.id!}&email=${user_email.$}",
+                        page_name: "Buy Vehicle",
+                  );
+                }));
+            },
+           else 
             onTap: () {
               onPressAddToCart(context, _addedToCartSnackbar);
             },
+          
             child: Container(
               margin: EdgeInsets.only(
-                left: 18,
-                right: 18,
+                left: 8,
+                right: 8,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -2213,8 +2228,56 @@ class _ProductDetailsState extends State<ProductDetails>
               ),
               height: 50,
               child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.add_to_cart_ucf,
+                child: Text("Buy",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Colors.transparent,
+          label: '',
+          icon: InkWell(
+          if (is_logged_in.$) 
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL}/vehicle/insurance?type=insurance&${_productDetails!.id!}&email=${user_email.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));
+            },
+           else 
+            onTap: () {
+              onPressAddToCart(context, _addedToCartSnackbar);
+            },
+          
+            child: Container(
+              margin: EdgeInsets.only(
+                left: 8,
+                right: 8,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: MyTheme.accent_color,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyTheme.accent_color_shadow,
+                    blurRadius: 20,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              height: 50,
+              child: Center(
+                child: Text("Insure",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -2227,9 +2290,22 @@ class _ProductDetailsState extends State<ProductDetails>
         BottomNavigationBarItem(
           label: "",
           icon: InkWell(
+          if (is_logged_in.$) 
             onTap: () {
-              onPressBuyNow(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL}/vehicle/lending?type=lending&id=${_productDetails!.id!}&email=${user_email.$}",
+                        page_name: "Apply for Vehicle Loan",
+                  );
+                }));
             },
+           else 
+            onTap: () {
+              onPressAddToCart(context, _addedToCartSnackbar);
+            },
+          
             child: Container(
               margin: EdgeInsets.only(left: 18, right: 18),
               height: 50,
@@ -2246,8 +2322,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 ],
               ),
               child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.buy_now_ucf,
+                child: Text("Lending",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

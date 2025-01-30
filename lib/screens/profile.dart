@@ -291,25 +291,25 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: [
           if (false)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildBottomVerticalCardListItem(
-                    "assets/coupon.png", LangText(context).local!.coupons_ucf,
-                    onPressed: () {}),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-                buildBottomVerticalCardListItem("assets/favoriteseller.png",
-                    LangText(context).local!.favorite_seller_ucf,
-                    onPressed: () {}),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     buildBottomVerticalCardListItem(
+            //         "assets/coupon.png", LangText(context).local!.coupons_ucf,
+            //         onPressed: () {}),
+            //     Divider(
+            //       thickness: 1,
+            //       color: MyTheme.light_grey,
+            //     ),
+            //     buildBottomVerticalCardListItem("assets/favoriteseller.png",
+            //         LangText(context).local!.favorite_seller_ucf,
+            //         onPressed: () {}),
+            //     Divider(
+            //       thickness: 1,
+            //       color: MyTheme.light_grey,
+            //     ),
+            //   ],
+            // ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -326,23 +326,39 @@ class _ProfileState extends State<Profile> {
           ),
 
           buildBottomVerticalCardListItem("assets/download.png",
-              LangText(context).local.all_digital_products_ucf, onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return DigitalProducts();
-            }));
-          }),
-          Divider(
-            thickness: 1,
-            color: MyTheme.light_grey,
+              LangText(context).local.user_verification_web, 
+            
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL}/user/verification?type=verification&email=${user_email.$}",
+                        page_name: "Verification Status",
+                  );
+                }));
+            },
           ),
 
-          buildBottomVerticalCardListItem(
-              "assets/coupon.png", LangText(context).local.coupons_ucf,
-              onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Coupons();
-            }));
-          }),
+          // buildBottomVerticalCardListItem("assets/download.png",
+          //     LangText(context).local.all_digital_products_ucf, 
+          //     onPressed: () {
+          //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //     return DigitalProducts();
+          //   }));
+          // }),
+          // Divider(
+          //   thickness: 1,
+          //   color: MyTheme.light_grey,
+          // ),
+
+          // buildBottomVerticalCardListItem(
+          //     "assets/coupon.png", LangText(context).local.coupons_ucf,
+          //     onPressed: () {
+          //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //     return Coupons();
+          //   }));
+          // }),
           Divider(
             thickness: 1,
             color: MyTheme.light_grey,
@@ -811,120 +827,8 @@ class _ProfileState extends State<Profile> {
               ],
             ));
   }
-/*
-  Widget buildSettingAndAddonsHorizontalMenu() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      margin: EdgeInsets.only(top: 14),
-      width: DeviceInfo(context).width,
-      decoration: BoxDecorations.buildBoxDecoration_1(),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        //color: Colors.blue,
-        child: Wrap(
-          direction: Axis.horizontal,
-          runAlignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 20,
-          spacing: 10,
-          //mainAxisAlignment: MainAxisAlignment.start,
-          alignment: WrapAlignment.center,
-          children: [
-            if (wallet_system_status.$)
-              buildSettingAndAddonsHorizontalMenuItem("assets/wallet.png",
-                  AppLocalizations.of(context).wallet_screen_my_wallet, () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Wallet();
-                }));
-              }),
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/orders.png",
-                AppLocalizations.of(context).profile_screen_orders,
-                is_logged_in.$
-                    ? () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return OrderList();
-                        }));
-                      }
-                    : () => null),
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/heart.png",
-                AppLocalizations.of(context).main_drawer_my_wishlist,
-                is_logged_in.$
-                    ? () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Wishlist();
-                        }));
-                      }
-                    : () => null),
-            if (club_point_addon_installed.$)
-              buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/points.png",
-                  AppLocalizations.of(context).club_point_screen_earned_points,
-                  is_logged_in.$
-                      ? () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Clubpoint();
-                          }));
-                        }
-                      : () => null),
-            if (refund_addon_installed.$)
-              buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/refund.png",
-                  AppLocalizations.of(context)
-                      .refund_request_screen_refund_requests,
-                  is_logged_in.$
-                      ? () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return RefundRequest();
-                          }));
-                        }
-                      : () => null),
-            if (conversation_system_status.$)
-              buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/messages.png",
-                  AppLocalizations.of(context).main_drawer_messages,
-                  is_logged_in.$
-                      ? () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return MessengerList();
-                          }));
-                        }
-                      : () => null),
-            if (true)
-              buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/auction.png",
-                  AppLocalizations.of(context).profile_screen_auction,
-                  is_logged_in.$
-                      ? () {
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) {
-                          //   return MessengerList();
-                          // }));
-                        }
-                      : () => null),
-            if (true)
-              buildSettingAndAddonsHorizontalMenuItem(
-                  "assets/classified_product.png",
-                  AppLocalizations.of(context).profile_screen_classified_products,
-                  is_logged_in.$
-                      ? () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return MessengerList();
-                          }));
-                        }
-                      : () => null),
-          ],
-        ),
-      ),
-    );
-  }*/
+
+
 
   Widget buildSettingAndAddonsHorizontalMenu() {
     return Container(
@@ -1021,41 +925,41 @@ class _ProfileState extends State<Profile> {
                         // }));
                       }
                     : () => null),
-          if (classified_product_status.$)
-            buildSettingAndAddonsHorizontalMenuItem(
-                "assets/classified_product.png",
-                AppLocalizations.of(context)!.classified_products,
-                is_logged_in.$
-                    ? () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return MyClassifiedAds();
-                        }));
-                      }
-                    : () => null),
+          // if (classified_product_status.$)
+          //   buildSettingAndAddonsHorizontalMenuItem(
+          //       "assets/classified_product.png",
+          //       AppLocalizations.of(context)!.classified_products,
+          //       is_logged_in.$
+          //           ? () {
+          //               Navigator.push(context,
+          //                   MaterialPageRoute(builder: (context) {
+          //                 return MyClassifiedAds();
+          //               }));
+          //             }
+          //           : () => null),
 
-          buildSettingAndAddonsHorizontalMenuItem(
-              "assets/download.png",
-              AppLocalizations.of(context)!.downloads_ucf,
-              is_logged_in.$
-                  ? () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return PurchasedDigitalProducts();
-                      }));
-                    }
-                  : () => null),
-          buildSettingAndAddonsHorizontalMenuItem(
-              "assets/download.png",
-              "Upload file",
-              is_logged_in.$
-                  ? () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return UploadFile();
-                      }));
-                    }
-                  : () => null),
+          // buildSettingAndAddonsHorizontalMenuItem(
+          //     "assets/download.png",
+          //     AppLocalizations.of(context)!.downloads_ucf,
+          //     is_logged_in.$
+          //         ? () {
+          //             Navigator.push(context,
+          //                 MaterialPageRoute(builder: (context) {
+          //               return PurchasedDigitalProducts();
+          //             }));
+          //           }
+          //         : () => null),
+          // buildSettingAndAddonsHorizontalMenuItem(
+          //     "assets/download.png",
+          //     "Upload file",
+          //     is_logged_in.$
+          //         ? () {
+          //             Navigator.push(context,
+          //                 MaterialPageRoute(builder: (context) {
+          //               return UploadFile();
+          //             }));
+          //           }
+          //         : () => null),
         ],
       ),
     );
@@ -1103,275 +1007,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-/*
-  Widget buildSettingAndAddonsVerticalMenu() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 120, top: 14),
-      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
-      decoration: BoxDecorations.buildBoxDecoration_1(),
-      child: Column(
-        children: [
-          Visibility(
-            visible: wallet_system_status.$,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 40,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return Wallet();
-                      }));
-                    },
-                    style: TextButton.styleFrom(
-                        splashFactory: NoSplash.splashFactory,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.zero),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/wallet.png",
-                          width: 16,
-                          height: 16,
-                          color: MyTheme.dark_font_grey,
-                        ),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        Text(
-                          AppLocalizations.of(context).wallet_screen_my_wallet,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyTheme.dark_font_grey, fontSize: 12),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 40,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return OrderList();
-                }));
-              },
-              style: TextButton.styleFrom(
-                  splashFactory: NoSplash.splashFactory,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.zero),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/orders.png",
-                    width: 16,
-                    height: 16,
-                    color: MyTheme.dark_font_grey,
-                  ),
-                  SizedBox(
-                    width: 24,
-                  ),
-                  Text(
-                    AppLocalizations.of(context).profile_screen_orders,
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            thickness: 1,
-            color: MyTheme.light_grey,
-          ),
-          Container(
-            height: 40,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Wishlist();
-                }));
-              },
-              style: TextButton.styleFrom(
-                  splashFactory: NoSplash.splashFactory,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.zero),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/heart.png",
-                    width: 16,
-                    height: 16,
-                    color: MyTheme.dark_font_grey,
-                  ),
-                  SizedBox(
-                    width: 24,
-                  ),
-                  Text(
-                    AppLocalizations.of(context).main_drawer_my_wishlist,
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            thickness: 1,
-            color: MyTheme.light_grey,
-          ),
-          Visibility(
-            visible: club_point_addon_installed.$,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 40,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return Clubpoint();
-                      }));
-                    },
-                    style: TextButton.styleFrom(
-                        splashFactory: NoSplash.splashFactory,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.zero),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/points.png",
-                          width: 16,
-                          height: 16,
-                          color: MyTheme.dark_font_grey,
-                        ),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)
-                              .club_point_screen_earned_points,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyTheme.dark_font_grey, fontSize: 12),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: refund_addon_installed.$,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 40,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return RefundRequest();
-                      }));
-                    },
-                    style: TextButton.styleFrom(
-                        splashFactory: NoSplash.splashFactory,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.zero),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/refund.png",
-                          width: 16,
-                          height: 16,
-                          color: MyTheme.dark_font_grey,
-                        ),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)
-                              .refund_request_screen_refund_requests,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: MyTheme.dark_font_grey, fontSize: 12),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  thickness: 1,
-                  color: MyTheme.light_grey,
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: conversation_system_status.$,
-            child: Container(
-              height: 40,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MessengerList();
-                  }));
-                },
-                style: TextButton.styleFrom(
-                    splashFactory: NoSplash.splashFactory,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.zero),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/messages.png",
-                      width: 16,
-                      height: 16,
-                      color: MyTheme.dark_font_grey,
-                    ),
-                    SizedBox(
-                      width: 24,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).main_drawer_messages,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: MyTheme.dark_font_grey, fontSize: 12),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-*/
+
   Widget buildCountersRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1538,48 +1174,7 @@ class _ProfileState extends State<Profile> {
           );
   }
 
-/*
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      /* leading: GestureDetector(
-        child: widget.show_back_button
-            ? Builder(
-                builder: (context) => IconButton(
-                  icon:
-                      Icon(CupertinoIcons.arrow_left, color: MyTheme.dark_grey),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              )
-            : Builder(
-                builder: (context) => GestureDetector(
-                  onTap: () {
-                    _scaffoldKey.currentState.openDrawer();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 18.0, horizontal: 0.0),
-                    child: Container(
-                      child: Image.asset(
-                        'assets/hamburger.png',
-                        height: 16,
-                        color: MyTheme.dark_grey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-      ),*/
-      title: Text(
-        AppLocalizations.of(context).profile_screen_account,
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
-      ),
-      elevation: 0.0,
-      titleSpacing: 0,
-    );
-  }*/
+
 
   loading() {
     showDialog(
