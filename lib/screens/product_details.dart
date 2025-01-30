@@ -423,7 +423,6 @@ class _ProductDetailsState extends State<ProductDetails>
       Provider.of<CartCounter>(context!, listen: false).getCount();
 
       if (mode == "lending") { 
-            onTap: () {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -432,9 +431,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Vehicle Loan",
                   );
                 }));
-            }
       } else if (mode == 'buy') { 
-            onTap: () {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -443,9 +440,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Contact Dealer",
                   );
                 }));
-            }
       } else if (mode == 'insure') {
-            onTap: () {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -454,7 +449,6 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Insurance",
                   );
                 }));
-            }
       }
 
     }
@@ -852,7 +846,7 @@ class _ProductDetailsState extends State<ProductDetails>
           app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           extendBody: true,
-          bottomNavigationBar: buildBottomAppBar(context, _addedToCartSnackbar),
+          bottomNavigationBar: buildBottomAppBar(context),
           //appBar: buildAppBar(statusBarHeight, context),
           body: RefreshIndicator(
             color: MyTheme.accent_color,
