@@ -165,7 +165,7 @@ class ProductRepository {
     });
 
     // return productDetailsResponseFromJson(response.body);
-    if (response.status == 200) {
+    if (response.statusCode == 200) {
       return productDetailsResponseFromJson(response.body);
     } else {
       return null;
