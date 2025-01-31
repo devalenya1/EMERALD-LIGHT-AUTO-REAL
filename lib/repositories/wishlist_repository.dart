@@ -5,7 +5,7 @@ import 'package:active_ecommerce_flutter/data_model/wishlist_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/middlewares/banned_user.dart';
 import 'package:active_ecommerce_flutter/repositories/api-request.dart';
-
+import 'package:http/http.dart' as http;
 import '../helpers/main_helpers.dart';
 
 class WishListRepository {

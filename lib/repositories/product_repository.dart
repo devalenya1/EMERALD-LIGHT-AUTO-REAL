@@ -8,6 +8,7 @@ import 'package:active_ecommerce_flutter/data_model/variant_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/system_config.dart';
 import 'package:active_ecommerce_flutter/repositories/api-request.dart';
+import 'package:http/http.dart' as http;
 
 import '../data_model/variant_price_response.dart';
  
@@ -155,8 +156,8 @@ class ProductRepository {
 
 
   Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
-      String url = ("${AppConfig.BASE_URL}/my/products/$slug");
-      // print(url.toString());
+      String url = ("${AppConfig.BASE_URL}/my/products?slug=$slug");
+      print(url.toString());
       
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,

@@ -394,15 +394,55 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   onPressLendingNow(context) {
-    addToCart(mode: "lending", context: context);
+    if (is_logged_in.$ == false) {
+      context?.go("/users/login");
+      return;
+    } 
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Vehicle Loan",
+                  );
+                }));
+    // addToCart(mode: "lending", context: context);
   }
+
 
   onPressBuyNow(context) {
-    addToCart(mode: "buy", context: context);
+    if (is_logged_in.$ == false) {
+      context?.go("/users/login");
+      return;
+    }  
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Contact Dealer",
+                  );
+                }));
+    // addToCart(mode: "buy", context: context);
   }
 
+
+
+
   onPressInsureNow(context) {
-    addToCart(mode: "insure", context: context);
+    if (is_logged_in.$ == false) {
+      context?.go("/users/login");
+      return;
+    } 
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));
+    // addToCart(mode: "insure", context: context);
   }
 
 
@@ -1317,7 +1357,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/seller-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .seller_policy_ucf,
                               );
@@ -1361,7 +1401,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/return-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .return_policy_ucf,
                               );
@@ -1405,7 +1445,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/support-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .support_policy_ucf,
                               );
