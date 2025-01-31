@@ -166,7 +166,7 @@ class ProductRepository {
 
   //   return productDetailsResponseFromJson(response.body);
   // }
-  
+
 Future<ProductDetailsResponse?> getProductDetails({required String slug}) async {
   String url = "${AppConfig.BASE_URL}/my/products?slug=$slug";
 
@@ -175,17 +175,17 @@ Future<ProductDetailsResponse?> getProductDetails({required String slug}) async 
       "App-Language": app_language ?? "en",
     });
 
-    print("Status Code: ${response.statusCode}");
-    print("Response Body: ${response.body}");
+    // print("Status Code: ${response.statusCode}");
+    // print("Response Body: ${response.body}");
 
     if (response.statusCode == 200) {
       return productDetailsResponseFromJson(response.body);
     } else {
-      print("Error: ${response.statusCode} - ${response.body}");
+      // print("Error: ${response.statusCode} - ${response.body}");
       return null;
     }
   } catch (e) {
-    print("Exception: $e");
+    // print("Exception: $e");
     return null;
   }
 }
