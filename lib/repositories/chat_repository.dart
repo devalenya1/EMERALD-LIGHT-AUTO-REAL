@@ -17,7 +17,8 @@ class ChatRepository {
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!,
         },
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
     return conversationResponseFromJson(response.body);
   }
 
@@ -31,28 +32,30 @@ class ChatRepository {
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!
         },
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
     return messageResponseFromJson(response.body);
   }
 
   Future<dynamic> getInserMessageResponse(
       {required conversation_id, required String message}) async {
-    var post_body = jsonEncode({
-      "user_id": "${user_id.$}",
-      "conversation_id": "${conversation_id}",
-      "message": "${message}"
-    });
+    // var post_body = jsonEncode({
+    //   "user_id": "${user_id.$}",
+    //   "conversation_id": "${conversation_id}",
+    //   "message": "${message}"
+    // });
 
-    String url = ("${AppConfig.BASE_URL}/chat/insert-message");
-    final response = await ApiRequest.post(
+    String url = ("${AppConfig.BASE_URL}/chat/insert-message?user_id=${user_id.$}&conversation_id=${conversation_id}&message={message}");
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!
         },
-        body: post_body,
-        middleware: BannedUser());
+        // body: post_body,
+        // middleware: BannedUser()
+        );
     return messageResponseFromJson(response.body);
   }
 
@@ -65,7 +68,7 @@ class ChatRepository {
         "Authorization": "Bearer ${access_token.$}",
         "App-Language": app_language.$!
       },
-      middleware: BannedUser()
+      // middleware: BannedUser()
     );
     return messageResponseFromJson(response.body);
   }
@@ -74,23 +77,24 @@ class ChatRepository {
       {required product_id,
       required String title,
       required String message}) async {
-    var post_body = jsonEncode({
-      "user_id": "${user_id.$}",
-      "product_id": "${product_id}",
-      "title": "${title}",
-      "message": "${message}"
-    });
-    String url = ("${AppConfig.BASE_URL}/chat/create-conversation");
-    print("Bearer ${access_token.$}");
-    final response = await ApiRequest.post(
+    // var post_body = jsonEncode({
+    //   "user_id": "${user_id.$}",
+    //   "product_id": "${product_id}",
+    //   "title": "${title}",
+    //   "message": "${message}"
+    // });
+    String url = ("${AppConfig.BASE_URL}/chat/create-conversation?user_id=${user_id.$}&product_id=${product_id}&title=${title}&message=${message}");
+    // print("Bearer ${access_token.$}");
+    final response = await ApiRequest.get(
         url: url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!
         },
-        body: post_body,
-        middleware: BannedUser());
+        // body: post_body,
+        // middleware: BannedUser()
+        );
     return conversationCreateResponseFromJson(response.body);
   }
 }

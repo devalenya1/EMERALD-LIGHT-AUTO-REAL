@@ -157,7 +157,7 @@ class ProductRepository {
 
   Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
       String url = ("${AppConfig.BASE_URL}/my/products?slug=$slug");
-      print(url.toString());
+     
       
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,

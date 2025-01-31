@@ -21,7 +21,8 @@ class ProfileRepository {
     final response = await ApiRequest.get(
       url:url,
       headers: {
-        "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$!,
       },
     );
 
@@ -33,7 +34,12 @@ class ProfileRepository {
 
     String url=("${AppConfig.BASE_URL}/profile/update");
     final response = await ApiRequest.post(url:url,
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},body: post_body );
+        headers: {
+          "Content-Type": "application/json", 
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$!,
+          },
+        body: post_body );
 
     return profileUpdateResponseFromJson(response.body);
   }
@@ -41,11 +47,17 @@ class ProfileRepository {
   Future<dynamic> getDeviceTokenUpdateResponse(
        String device_token) async {
 
-    var post_body = jsonEncode({"device_token": "${device_token}"});
+    // var post_body = jsonEncode({"device_token": "${device_token}"});
 
-    String url=("${AppConfig.BASE_URL}/profile/update-device-token");
-    final response = await ApiRequest.post(url:url,
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},body: post_body );
+    String url=("${AppConfig.BASE_URL}/profile/update-device-token?device_token=${device_token}");
+    final response = await ApiRequest.get(url:url,
+        headers: {
+          "Content-Type": "application/json", 
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$!,
+        },
+      // body: post_body 
+      );
 
     return deviceTokenUpdateResponseFromJson(response.body);
   }
@@ -58,7 +70,11 @@ class ProfileRepository {
 
     String url=("${AppConfig.BASE_URL}/profile/update-image?image=${image}&filename=$filename");
     final response = await ApiRequest.get(url:url,
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},
+        headers: {
+          "Content-Type": "application/json", 
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$!,
+        },
         // body: post_body 
         );
 
@@ -71,7 +87,10 @@ class ProfileRepository {
 
     String url=("${AppConfig.BASE_URL}/profile/check-phone-and-email");
     final response = await ApiRequest.post(url:url,
-        headers: {"Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$!,
+        },
         body: '');
 
 
@@ -84,7 +103,10 @@ class ProfileRepository {
     String url=("${AppConfig.BASE_URL}/customer/info");
 
     final response = await ApiRequest.get(url: url,
-        headers: {"Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,});
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$!,
+        });
 
 
     return userInfoResponseFromJson(response.body);

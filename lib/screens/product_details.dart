@@ -394,10 +394,8 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   onPressLendingNow(context) {
-    if (is_logged_in.$ == false) {
-      context?.go("/users/login");
-      return;
-    } 
+    addToCart(mode: "lending", context: context);
+
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -406,15 +404,13 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Vehicle Loan",
                   );
                 }));
-    // addToCart(mode: "lending", context: context);
+    
   }
 
 
   onPressBuyNow(context) {
-    if (is_logged_in.$ == false) {
-      context?.go("/users/login");
-      return;
-    }  
+    addToCart(mode: "buy", context: context); 
+
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -423,17 +419,15 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Contact Dealer",
                   );
                 }));
-    // addToCart(mode: "buy", context: context);
+    
   }
 
 
 
 
   onPressInsureNow(context) {
-    if (is_logged_in.$ == false) {
-      context?.go("/users/login");
-      return;
-    } 
+   addToCart(mode: "insure", context: context);
+
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -442,7 +436,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         page_name: "Apply for Insurance",
                   );
                 }));
-    // addToCart(mode: "insure", context: context);
+    
   }
 
 
@@ -452,46 +446,46 @@ class _ProductDetailsState extends State<ProductDetails>
       return;
     }
 
-    var cartAddResponse = await CartRepository().getCartAddResponse(
-        _productDetails!.id, _variant, user_id.$, _quantity);
+    // var cartAddResponse = await CartRepository().getCartAddResponse(
+    //     _productDetails!.id, _variant, user_id.$, _quantity);
 
-    if (cartAddResponse.result == false) {
-      ToastComponent.showDialog(cartAddResponse.message,
-          gravity: Toast.center, duration: Toast.lengthLong);
-      return;
-    } else {
-      Provider.of<CartCounter>(context!, listen: false).getCount();
+    // if (cartAddResponse.result == false) {
+    //   ToastComponent.showDialog(cartAddResponse.message,
+    //       gravity: Toast.center, duration: Toast.lengthLong);
+    //   return;
+    // } else {
+    //   Provider.of<CartCounter>(context!, listen: false).getCount();
 
-      if (mode == "lending") { 
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
-                        page_name: "Apply for Vehicle Loan",
-                  );
-                }));
-      } else if (mode == 'buy') { 
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
-                        page_name: "Contact Dealer",
-                  );
-                }));
-      } else if (mode == 'insure') {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-                  return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
-                        page_name: "Apply for Insurance",
-                  );
-                }));
-      }
+      // if (mode == "lending") { 
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Apply for Vehicle Loan",
+      //             );
+      //           }));
+      // } else if (mode == 'buy') { 
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Contact Dealer",
+      //             );
+      //           }));
+      // } else if (mode == 'insure') {
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Apply for Insurance",
+      //             );
+      //           }));
+      // }
 
-    }
+    // }
   }
 
   onPopped(value) async {

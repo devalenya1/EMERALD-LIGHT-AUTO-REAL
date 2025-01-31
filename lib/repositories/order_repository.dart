@@ -25,7 +25,8 @@ class OrderRepository {
     final response = await ApiRequest.get(
         url: url,
         headers: header,
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
 
     return orderMiniResponseFromJson(response.body);
   }
@@ -42,7 +43,8 @@ class OrderRepository {
     final response = await ApiRequest.get(
         url: url,
         headers:header,
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
     return orderDetailResponseFromJson(response.body);
   }
 
@@ -57,7 +59,8 @@ class OrderRepository {
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!,
         },
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
     return reOrderResponseFromJson(response.body);
   }
 
@@ -70,7 +73,8 @@ class OrderRepository {
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$!,
         },
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
     return commonResponseFromJson(response.body);
   }
 
@@ -85,7 +89,8 @@ class OrderRepository {
     final response = await ApiRequest.get(
         url: url,
         headers: header,
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
 
     return orderItemlResponseFromJson(response.body);
   }
@@ -102,7 +107,8 @@ class OrderRepository {
     final response = await ApiRequest.get(
         url: url,
         headers: header,
-        middleware: BannedUser());
+        // middleware: BannedUser()
+        );
 
     return purchasedDigitalProductResponseFromJson(response.body);
   }
