@@ -164,12 +164,12 @@ class ProductRepository {
       "App-Language": app_language.$!,
     });
 
-    // return productDetailsResponseFromJson(response.body);
-    if (response.statusCode == 200) {
-      return productDetailsResponseFromJson(response.body);
-    } else {
-      // return null;
-    }
+    return productDetailsResponseFromJson(response.body);
+    // if (response.statusCode == 200) {
+    //   return productDetailsResponseFromJson(response.body);
+    // } else {
+    //   // return null;
+    // }
   }
 
 
