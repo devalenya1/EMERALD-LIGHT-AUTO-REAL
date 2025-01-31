@@ -168,7 +168,7 @@ class ProductRepository {
     if (response.statusCode == 200) {
       return productDetailsResponseFromJson(response.body);
     } else {
-      return null;
+      // return null;
     }
   }
 
