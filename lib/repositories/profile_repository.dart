@@ -58,7 +58,9 @@ class ProfileRepository {
 
     String url=("${AppConfig.BASE_URL}/profile/update-image?image=${image}&filename=$filename");
     final response = await ApiRequest.get(url:url,
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},body: post_body );
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},
+        // body: post_body 
+        );
 
     return profileImageUpdateResponseFromJson(response.body);
   }
@@ -69,7 +71,8 @@ class ProfileRepository {
 
     String url=("${AppConfig.BASE_URL}/profile/check-phone-and-email");
     final response = await ApiRequest.post(url:url,
-        headers: {"Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},body: '');
+        headers: {"Authorization": "Bearer ${access_token.$}","App-Language": app_language.$!,},
+        body: '');
 
 
     return phoneEmailAvailabilityResponseFromJson(response.body);
