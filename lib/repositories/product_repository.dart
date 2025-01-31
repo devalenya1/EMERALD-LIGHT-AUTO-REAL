@@ -155,17 +155,41 @@ class ProductRepository {
 
 
 
-  Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
-      String url = ("${AppConfig.BASE_URL}/my/products?slug=$slug");
+  // Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
+  //     String url = ("${AppConfig.BASE_URL}/my/products?slug=$slug");
      
       
-    final response = await ApiRequest.get(url: url, headers: {
-      "App-Language": app_language.$!,
-    });
-    // print(response.body);
+  //   final response = await ApiRequest.get(url: url, headers: {
+  //     "App-Language": app_language ?? "en",
+  //   });
+  //   // print(response.body);
 
-    return productDetailsResponseFromJson(response.body);
+  //   return productDetailsResponseFromJson(response.body);
+  // }
+  
+Future<ProductDetailsResponse?> getProductDetails({required String slug}) async {
+  String url = "${AppConfig.BASE_URL}/my/products?slug=$slug";
+
+  try {
+    final response = await http.get(Uri.parse(url), headers: {
+      "App-Language": app_language ?? "en",
+    });
+
+    print("Status Code: ${response.statusCode}");
+    print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return productDetailsResponseFromJson(response.body);
+    } else {
+      print("Error: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("Exception: $e");
+    return null;
   }
+}
+
 
 
   Future<ProductDetailsResponse> getDigitalProductDetails({int id = 0}) async {
