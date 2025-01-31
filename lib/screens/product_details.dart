@@ -176,10 +176,10 @@ class _ProductDetailsState extends State<ProductDetails>
     var productDetailsResponse =
         await ProductRepository().getProductDetails(slug: widget.slug);
 
-    if (productDetailsResponse.detailed_products!.length > 0) {
-      _productDetails = productDetailsResponse.detailed_products![0];
+    if (productDetailsResponse.detailed_products!.length > 0 ?? "null") {
+      _productDetails = productDetailsResponse.detailed_products![0] ?? "null";
       sellerChatTitleController.text =
-          productDetailsResponse.detailed_products![0].name!;
+          productDetailsResponse.detailed_products![0].name! ?? "null";
     }
 
     setProductDetailValues();

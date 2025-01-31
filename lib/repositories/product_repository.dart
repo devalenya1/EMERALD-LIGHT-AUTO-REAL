@@ -170,9 +170,9 @@ class ProductRepository {
 Future<ProductDetailsResponse?> getProductDetails({required String slug}) async {
   String url = "${AppConfig.BASE_URL}/my/products?slug=$slug";
 
-  try {
+  // try {
     final response = await http.get(Uri.parse(url), headers: {
-      "App-Language": app_language ?? "en",
+      "App-Language": app_language.$!,
     });
 
     // print("Status Code: ${response.statusCode}");
@@ -184,10 +184,10 @@ Future<ProductDetailsResponse?> getProductDetails({required String slug}) async 
       // print("Error: ${response.statusCode} - ${response.body}");
       return null;
     }
-  } catch (e) {
-    // print("Exception: $e");
-    return null;
-  }
+  // } catch (e) {
+  //   // print("Exception: $e");
+  //   return null;
+  // }
 }
 
 
