@@ -394,23 +394,24 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   onPressLendingNow(context) {
-    addToCart(mode: "lending", context: context);
+    addToCart(mode: "lending", context: context);  
+  }
 
+  onPressLendingNowRoute(context) {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
-                    url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
-                        page_name: "Apply for Vehicle Loan",
+                    url: "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                    page_name: "Apply for Vehicle Loan",
                   );
-                }));
-    
+                })); 
   }
 
 
   onPressBuyNow(context) {
-    addToCart(mode: "buy", context: context); 
-
+    addToCart(mode: "buy", context: context);   
+  }
+  onPressBuyNowRoute(context) {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -418,16 +419,16 @@ class _ProductDetailsState extends State<ProductDetails>
                       "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
                         page_name: "Contact Dealer",
                   );
-                }));
-    
+                }));    
   }
 
 
 
 
   onPressInsureNow(context) {
-   addToCart(mode: "insure", context: context);
-
+   addToCart(mode: "insure", context: context);  
+  }
+  onPressInsureNowRoute(context) {
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
@@ -435,8 +436,7 @@ class _ProductDetailsState extends State<ProductDetails>
                       "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&id=${_productDetails!.id}&email=${user_id.$}",
                         page_name: "Apply for Insurance",
                   );
-                }));
-    
+                }));   
   }
 
 
@@ -2243,6 +2243,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
             onTap: () {
               onPressBuyNow(context);
+              onPressBuyNowRoute(context);
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -2280,6 +2281,7 @@ class _ProductDetailsState extends State<ProductDetails>
           
             onTap: () {
               onPressInsureNow(context);
+              onPressInsureNowRoute(context);
             },
           
             child: Container(
@@ -2317,6 +2319,7 @@ class _ProductDetailsState extends State<ProductDetails>
            
             onTap: () {
               onPressLendingNow(context);
+              onPressLendingNowRoute(context);
             },
           
             child: Container(

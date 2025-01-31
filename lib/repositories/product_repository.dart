@@ -157,7 +157,7 @@ class ProductRepository {
 
 
   Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
-      Uri url = Uri.parse("${AppConfig.BASE_URL}/my/products?slug=$slug");
+      Uri url = Uri.parse("${AppConfig.BASE_URL}/my/products?slug=hondazoegt-line-2022vf1ag000069421851-130");
      
       
     final response = await http.get(url, headers: {
@@ -165,11 +165,6 @@ class ProductRepository {
     });
 
     return productDetailsResponseFromJson(response.body);
-    // if (response.statusCode == 200) {
-    //   return productDetailsResponseFromJson(response.body);
-    // } else {
-    //   // return null;
-    // }
   }
 
 

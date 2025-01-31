@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+ 
 ProductDetailsResponse productDetailsResponseFromJson(String str) =>
     ProductDetailsResponse.fromJson(json.decode(str));
 
