@@ -432,7 +432,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 MaterialPageRoute(builder: (context) {
                   return CommonWebviewScreen(
                     url:
-                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&id=${_productDetails!.id}&email=${user_id.$}",
                         page_name: "Apply for Insurance",
                   );
                 }));
