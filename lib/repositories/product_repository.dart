@@ -8,9 +8,10 @@ import 'package:active_ecommerce_flutter/data_model/variant_response.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/system_config.dart';
 import 'package:active_ecommerce_flutter/repositories/api-request.dart';
+import 'package:http/http.dart' as http;
 
 import '../data_model/variant_price_response.dart';
-
+ 
 class ProductRepository {
   Future<CatResponse> getCategoryRes() async {
     String url = ("${AppConfig.BASE_URL}/seller/products/categories");
@@ -133,24 +134,39 @@ class ProductRepository {
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    // print(response.body);
+    
     return productMiniResponseFromJson(response.body);
+    
   }
 
-  Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
-    String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
-    print("Product Url");
+  // Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
+  //   String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
+  //   print("Product Url");
 
-    // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
-    //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
-    //   print(url.toString());
-    final response = await ApiRequest.get(url: url, headers: {
+  //   // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
+  //   //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
+  //   //   print(url.toString());
+  //   final response = await ApiRequest.get(url: url, headers: {
+  //     "App-Language": app_language.$!,
+  //   });
+  //   print(response.body);
+
+  //   return productDetailsResponseFromJson(response.body);
+  // }, String user_id
+
+
+
+  Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
+      Uri url = Uri.parse("${AppConfig.BASE_URL}/details/products?slug=hondazoegt-line-2022vf1ag000069421851-130");
+     
+      
+    final response = await http.get(url, headers: {
       "App-Language": app_language.$!,
     });
-    print(response.body);
 
     return productDetailsResponseFromJson(response.body);
   }
+
 
   Future<ProductDetailsResponse> getDigitalProductDetails({int id = 0}) async {
     String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
