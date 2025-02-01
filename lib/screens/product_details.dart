@@ -2240,9 +2240,9 @@ class _ProductDetailsState extends State<ProductDetails>
         BottomNavigationBarItem(
           backgroundColor: Colors.transparent,
           label: '',
-          InkWell(
+          icon: InkWell(
             onTap: () {
-              if (!${user_id.$}) {
+              if (!$user_id.$) {
                 onPressBuyNow(context);
               }
               // onPressBuyNow(context);
@@ -2291,7 +2291,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              if (!${user_id.$}) {
+              if (!$user_id.$) {
                 onPressInsureNow(context);
               }
               // onPressInsureNow(context);
@@ -2340,7 +2340,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              if (!${user_id.$}) {
+              if (!$user_id.$) {
                 onPressLendingNow(context);
               }
               // onPressLendingNow(context);
