@@ -17,12 +17,13 @@ class AppConfig {
   //configure this
   static const bool HTTPS = true;
 
-  static const DOMAIN_PATH = "emeraldlightauto.uk";
-  static const DOMAIN_OTHER_USELESS = "emeraldlightauto.uk";
+  static const DOMAIN_PATH = "emeraldlightauto.uk/my";
+  static const DOMAIN_OTHER_USELESS = "emeraldlightauto.uk/my";
   //airsoftauctions.co.uk  emeraldlightauto.uk
 
   //do not configure these below
-  static const String API_ENDPATH = "api/v2";
+  // static const String API_ENDPATH = "api/v2";
+  static const String API_ENDPATH = "";
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
   
