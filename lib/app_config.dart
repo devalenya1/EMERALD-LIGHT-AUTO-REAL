@@ -17,7 +17,7 @@ class AppConfig {
   //configure this
   static const bool HTTPS = true;
 
-  static const DOMAIN_PATH = "app.emeraldlightauto.uk";
+  static const DOMAIN_PATH = "emeraldlightauto.uk";
   static const DOMAIN_OTHER_USELESS = "emeraldlightauto.uk";
   //airsoftauctions.co.uk  emeraldlightauto.uk
 
