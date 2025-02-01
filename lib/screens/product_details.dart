@@ -2242,9 +2242,6 @@ class _ProductDetailsState extends State<ProductDetails>
           label: '',
           icon: InkWell(
             onTap: () {
-              if (!$user_id.$) {
-                onPressBuyNow(context);
-              }
               // onPressBuyNow(context);
               // onPressBuyNowRoute(context);
               Navigator.push(context,
@@ -2291,9 +2288,6 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              if (!$user_id.$) {
-                onPressInsureNow(context);
-              }
               // onPressInsureNow(context);
               // onPressInsureNowRoute(context);
               Navigator.push(context,
@@ -2340,9 +2334,6 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              if (!$user_id.$) {
-                onPressLendingNow(context);
-              }
               // onPressLendingNow(context);
               // onPressLendingNowRoute(context);
               Navigator.push(context,
