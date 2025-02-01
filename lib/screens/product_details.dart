@@ -2242,8 +2242,16 @@ class _ProductDetailsState extends State<ProductDetails>
           label: '',
           icon: InkWell(
             onTap: () {
-              onPressBuyNow(context);
-              onPressBuyNowRoute(context);
+              // onPressBuyNow(context);
+              // onPressBuyNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Contact Dealer",
+                  );
+                }));    
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -2280,8 +2288,16 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              onPressInsureNow(context);
-              onPressInsureNowRoute(context);
+              // onPressInsureNow(context);
+              // onPressInsureNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));   
             },
           
             child: Container(
@@ -2318,8 +2334,15 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              onPressLendingNow(context);
-              onPressLendingNowRoute(context);
+              // onPressLendingNow(context);
+              // onPressLendingNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url: "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                    page_name: "Apply for Vehicle Loan",
+                  );
+                })); 
             },
           
             child: Container(
