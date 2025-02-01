@@ -23,13 +23,13 @@ class AppConfig {
 
   //do not configure these below
   // static const String API_ENDPATH = "api/v2";
-  static const String API_ENDPATH = "";
+ 
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
   
   static const String RAW_BASE_URL_OTHER = "${PROTOCOL}${DOMAIN_OTHER_USELESS}";
-  
-  static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
+  // static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
+  static const String BASE_URL = "${RAW_BASE_URL}";
 
   @override
   String toString() {
