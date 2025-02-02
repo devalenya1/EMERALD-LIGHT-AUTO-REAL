@@ -352,7 +352,7 @@ class _ProductDetailsState extends State<ProductDetails>
     _productImageList.clear();
     _currentImage = 0;
     setState(() {});
-  }
+  } 
 
   Future<void> _onPageRefresh() async {
     reset();
