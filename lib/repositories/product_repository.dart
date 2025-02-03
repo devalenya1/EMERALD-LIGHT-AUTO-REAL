@@ -143,29 +143,29 @@ class ProductRepository {
   //   String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
   //   print("Product Url");
 
-  //   // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
-  //   //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
-  //   //   print(url.toString());
-  //   final response = await ApiRequest.get(url: url, headers: {
-  //     "App-Language": app_language.$!,
-  //   });
-  //   print(response.body);
-
-  //   return productDetailsResponseFromJson(response.body);
-  // }, String user_id
-
-
-
-  Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
-      Uri url = Uri.parse("${AppConfig.BASE_URL}/details/products?slug=hondazoegt-line-2022vf1ag000069421851-130");
-     
-      
-    final response = await http.get(url, headers: {
+    Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
+      String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
+      print(url.toString());
+    final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
+    print(response.body);
 
     return productDetailsResponseFromJson(response.body);
-  }
+  } 
+
+
+
+  // Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
+  //     Uri url = Uri.parse("${AppConfig.BASE_URL}/details/products?slug=hondazoegt-line-2022vf1ag000069421851-130");
+     
+      
+  //   final response = await http.get(url, headers: {
+  //     "App-Language": app_language.$!,
+  //   });
+
+  //   return productDetailsResponseFromJson(response.body);
+  // }
 
 
   Future<ProductDetailsResponse> getDigitalProductDetails({int id = 0}) async {
