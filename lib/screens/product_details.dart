@@ -1,13 +1,18 @@
 import 'dart:async';
-
+ 
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
+import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/btn.dart';
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
+import 'package:active_ecommerce_flutter/custom/lang_text.dart';
+import 'package:active_ecommerce_flutter/custom/quantity_input.dart';
 import 'package:active_ecommerce_flutter/custom/text_styles.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/data_model/product_details_response.dart';
 import 'package:active_ecommerce_flutter/helpers/color_helper.dart';
+import 'package:active_ecommerce_flutter/helpers/main_helpers.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/system_config.dart';
@@ -21,7 +26,6 @@ import 'package:active_ecommerce_flutter/screens/brand_products.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/chat.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
-import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/screens/product_reviews.dart';
 import 'package:active_ecommerce_flutter/screens/seller_details.dart';
 import 'package:active_ecommerce_flutter/screens/video_description_screen.dart';
@@ -32,18 +36,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:social_share/social_share.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetails extends StatefulWidget {
-  int? id;
+  String slug;
 
-  ProductDetails({Key? key, this.id}) : super(key: key);
+  ProductDetails({Key? key, required this.slug}) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -67,7 +74,8 @@ class _ProductDetailsState extends State<ProductDetails>
   Animation? _colorTween;
   late AnimationController _ColorAnimationController;
   WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..enableZoom(false);
   double webViewHeight = 50.0;
 
   CarouselController _carouselController = CarouselController();
@@ -75,7 +83,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   //init values
 
-  bool? _isInWishList = false;
+  bool _isInWishList = false;
   var _productDetailsFetched = false;
   DetailedProduct? _productDetails;
   var _productImageList = [];
@@ -100,6 +108,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   @override
   void initState() {
+    quantityText.text = "${_quantity ?? 0}";
     controller;
     _ColorAnimationController =
         AnimationController(vsync: this, duration: Duration(seconds: 0));
@@ -127,7 +136,7 @@ class _ProductDetailsState extends State<ProductDetails>
           }
         }
       }
-      print("opachity{} $_scrollPosition");
+      //print("opachity{} $_scrollPosition");
 
       setState(() {});
     });
@@ -156,7 +165,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   // fetchVariantPrice() async {
   //   var response = await ProductRepository()
-  //       .getVariantPrice(id: widget.id, quantity: _quantity);
+  //       .getVariantPrice(id: widget.slug, quantity: _quantity);
   //
   //   print(response);
   //   _totalPrice = response.data.price;
@@ -165,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   fetchProductDetails() async {
     var productDetailsResponse =
-        await ProductRepository().getProductDetails(id: widget.id);
+        await ProductRepository().getProductDetails(slug: widget.slug);
 
     if (productDetailsResponse.detailed_products!.length > 0) {
       _productDetails = productDetailsResponse.detailed_products![0];
@@ -180,7 +189,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   fetchRelatedProducts() async {
     var relatedProductResponse =
-        await ProductRepository().getRelatedProducts(id: widget.id);
+        await ProductRepository().getRelatedProducts(slug: widget.slug);
     _relatedProducts.addAll(relatedProductResponse.products!);
     _relatedProductInit = true;
 
@@ -188,8 +197,8 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   fetchTopProducts() async {
-    var topProductResponse =
-        await ProductRepository().getTopFromThisSellerProducts(id: widget.id);
+    var topProductResponse = await ProductRepository()
+        .getTopFromThisSellerProducts(slug: widget.slug);
     _topProducts.addAll(topProductResponse.products!);
     _topProductInit = true;
   }
@@ -235,28 +244,28 @@ class _ProductDetailsState extends State<ProductDetails>
   fetchWishListCheckInfo() async {
     var wishListCheckResponse =
         await WishListRepository().isProductInUserWishList(
-      product_id: widget.id,
+      product_id: widget.slug,
     );
 
-    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    //print("p&u:" + widget.slug.toString() + " | " + _user_id.toString());
     _isInWishList = wishListCheckResponse.is_in_wishlist;
     setState(() {});
   }
 
   addToWishList() async {
     var wishListCheckResponse =
-        await WishListRepository().add(product_id: widget.id);
+        await WishListRepository().add(product_id: widget.slug);
 
-    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    //print("p&u:" + widget.slug.toString() + " | " + _user_id.toString());
     _isInWishList = wishListCheckResponse.is_in_wishlist;
     setState(() {});
   }
 
   removeFromWishList() async {
     var wishListCheckResponse =
-        await WishListRepository().remove(product_id: widget.id);
+        await WishListRepository().remove(product_id: widget.slug);
 
-    //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+    //print("p&u:" + widget.slug.toString() + " | " + _user_id.toString());
     _isInWishList = wishListCheckResponse.is_in_wishlist;
     setState(() {});
   }
@@ -281,6 +290,10 @@ class _ProductDetailsState extends State<ProductDetails>
     }
   }
 
+  setQuantity(quantity) {
+    quantityText.text = "${quantity ?? 0}";
+  }
+
   fetchAndSetVariantWiseInfo({bool change_appbar_string = true}) async {
     var color_string = _colorList.length > 0
         ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
@@ -290,7 +303,7 @@ class _ProductDetailsState extends State<ProductDetails>
     return;*/
 
     var variantResponse = await ProductRepository().getVariantWiseInfo(
-        id: widget.id,
+        slug: widget.slug,
         color: color_string,
         variants: _choiceString,
         qty: _quantity);
@@ -316,7 +329,7 @@ class _ProductDetailsState extends State<ProductDetails>
     // }
 
     int pindex = 0;
-    _productDetails!.photos!.forEach((photo) {
+    _productDetails!.photos?.forEach((photo) {
       //print('con:'+ (photo.variant == _variant && variantResponse.image != "").toString());
       if (photo.variant == _variant &&
           variantResponse.variantData!.image != "") {
@@ -325,6 +338,7 @@ class _ProductDetailsState extends State<ProductDetails>
       }
       pindex++;
     });
+    setQuantity(_quantity);
     setState(() {});
   }
 
@@ -352,7 +366,7 @@ class _ProductDetailsState extends State<ProductDetails>
     _productImageList.clear();
     _currentImage = 0;
     setState(() {});
-  } 
+  }
 
   Future<void> _onPageRefresh() async {
     reset();
@@ -379,51 +393,99 @@ class _ProductDetailsState extends State<ProductDetails>
     fetchAndSetVariantWiseInfo();
   }
 
-  onPressAddToCart(context, snackbar) {
-    addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
+  onPressLendingNow(context) {
+    addToCart(mode: "lending", context: context);  
   }
+
+  onPressLendingNowRoute(context) {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url: "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                    page_name: "Apply for Vehicle Loan",
+                  );
+                })); 
+  }
+
 
   onPressBuyNow(context) {
-    addToCart(mode: "buy_now", context: context);
+    addToCart(mode: "buy", context: context);   
+  }
+  onPressBuyNowRoute(context) {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Contact Dealer",
+                  );
+                }));    
   }
 
-  addToCart({mode, context = null, snackbar = null}) async {
+
+
+
+  onPressInsureNow(context) {
+   addToCart(mode: "insure", context: context);  
+  }
+  onPressInsureNowRoute(context) {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));   
+  }
+
+
+  addToCart({mode, BuildContext? context, snackbar = null}) async {
     if (is_logged_in.$ == false) {
-      // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-      //     gravity: Toast.center, duration: Toast.lengthLong);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+      context?.go("/users/login");
       return;
     }
 
-    // print(widget.id);
-    // print(_variant);
-    // print(user_id.$);
-    // print(_quantity);
+    // var cartAddResponse = await CartRepository().getCartAddResponse(
+    //     _productDetails!.id, _variant, user_id.$, _quantity);
 
-    var cartAddResponse = await CartRepository()
-        .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
+    // if (cartAddResponse.result == false) {
+    //   ToastComponent.showDialog(cartAddResponse.message,
+    //       gravity: Toast.center, duration: Toast.lengthLong);
+    //   return;
+    // } else {
+    //   Provider.of<CartCounter>(context!, listen: false).getCount();
 
-    if (cartAddResponse.result == false) {
-      ToastComponent.showDialog(cartAddResponse.message,
-          gravity: Toast.center, duration: Toast.lengthLong);
-      return;
-    } else {
-      Provider.of<CartCounter>(context, listen: false).getCount();
+      // if (mode == "lending") { 
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Apply for Vehicle Loan",
+      //             );
+      //           }));
+      // } else if (mode == 'buy') { 
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Contact Dealer",
+      //             );
+      //           }));
+      // } else if (mode == 'insure') {
+      //         Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) {
+      //             return CommonWebviewScreen(
+      //               url:
+      //                 "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&${_productDetails!.id}&email=${user_id.$}",
+      //                   page_name: "Apply for Insurance",
+      //             );
+      //           }));
+      // }
 
-      if (mode == "add_to_cart") {
-        if (snackbar != null && context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-        }
-        reset();
-        fetchAll();
-      } else if (mode == 'buy_now') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Cart(has_bottomnav: false);
-        })).then((value) {
-          onPopped(value);
-        });
-      }
-    }
+    // }
   }
 
   onPopped(value) async {
@@ -476,8 +538,10 @@ class _ProductDetailsState extends State<ProductDetails>
                           ),
                           onPressed: () {
                             onCopyTap(setState);
-                            SocialShare.copyToClipboard(
-                                text: _productDetails!.link);
+                            Clipboard.setData(ClipboardData(
+                                text: _productDetails!.link ?? ""));
+                            // SocialShare.copyToClipboard(
+                            //     text: _productDetails!.link, image: "");
                           },
                         ),
                       ),
@@ -758,7 +822,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
     var conversationCreateResponse = await ChatRepository()
         .getCreateConversationResponse(
-            product_id: widget.id, title: title, message: message);
+            product_id: widget.slug, title: title, message: message);
 
     Navigator.of(loadingcontext).pop();
 
@@ -816,7 +880,7 @@ class _ProductDetailsState extends State<ProductDetails>
           app_language_rtl.$! ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           extendBody: true,
-          bottomNavigationBar: buildBottomAppBar(context, _addedToCartSnackbar),
+          bottomNavigationBar: buildBottomAppBar(context),
           //appBar: buildAppBar(statusBarHeight, context),
           body: RefreshIndicator(
             color: MyTheme.accent_color,
@@ -871,48 +935,48 @@ class _ProductDetailsState extends State<ProductDetails>
                                     fontWeight: FontWeight.bold),
                               ))),
                       Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Cart(has_bottomnav: false);
-                          })).then((value) {
-                            onPopped(value);
-                          });
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          padding: EdgeInsets.all(8),
-                          child: badges.Badge(
-                            badgeStyle: badges.BadgeStyle(
-                              shape: badges.BadgeShape.circle,
-                              badgeColor: MyTheme.accent_color,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            badgeAnimation: badges.BadgeAnimation.slide(
-                              toAnimate: true,
-                            ),
-                            stackFit: StackFit.loose,
-                            child: Image.asset(
-                              "assets/cart.png",
-                              color: MyTheme.dark_font_grey,
-                              height: 16,
-                            ),
-                            badgeContent: Consumer<CartCounter>(
-                              builder: (context, cart, child) {
-                                return Text(
-                                  "${cart.cartCounter}",
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Navigator.push(context,
+                      //         MaterialPageRoute(builder: (context) {
+                      //       return Cart(has_bottomnav: false);
+                      //     })).then((value) {
+                      //       onPopped(value);
+                      //     });
+                      //   },
+                      //   child: Container(
+                      //     decoration:
+                      //         BoxDecorations.buildCircularButtonDecoration_1(),
+                      //     width: 36,
+                      //     height: 36,
+                      //     padding: EdgeInsets.all(8),
+                      //     child: badges.Badge(
+                      //       badgeStyle: badges.BadgeStyle(
+                      //         shape: badges.BadgeShape.circle,
+                      //         badgeColor: MyTheme.accent_color,
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       badgeAnimation: badges.BadgeAnimation.slide(
+                      //         toAnimate: true,
+                      //       ),
+                      //       stackFit: StackFit.loose,
+                      //       child: Image.asset(
+                      //         "assets/cart.png",
+                      //         color: MyTheme.dark_font_grey,
+                      //         height: 16,
+                      //       ),
+                      //       badgeContent: Consumer<CartCounter>(
+                      //         builder: (context, cart, child) {
+                      //           return Text(
+                      //             "${cart.cartCounter}",
+                      //             style: TextStyle(
+                      //                 fontSize: 12, color: Colors.white),
+                      //           );
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(width: 15),
                       InkWell(
                         onTap: () {
@@ -945,7 +1009,7 @@ class _ProductDetailsState extends State<ProductDetails>
                           child: Center(
                             child: Icon(
                               Icons.favorite,
-                              color: _isInWishList!
+                              color: _isInWishList
                                   ? Color.fromRGBO(230, 46, 4, 1)
                                   : MyTheme.dark_font_grey,
                               size: 16,
@@ -973,7 +1037,7 @@ class _ProductDetailsState extends State<ProductDetails>
                               EdgeInsets.only(top: 14, left: 14, right: 14),
                           child: _productDetails != null
                               ? Text(
-                                  _productDetails!.name!,
+                                  _productDetails!.name!, 
                                   style: TextStyles.smallTitleTexStyle(),
                                   maxLines: 2,
                                 )
@@ -1079,7 +1143,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         ),
                         Padding(
                           padding:
-                              EdgeInsets.only(top: 14, left: 14, right: 14),
+                              EdgeInsets.only(top: 10, left: 14, right: 14),
                           child: _productDetails != null
                               ? buildQuantityRow()
                               : ShimmerHelper().buildBasicShimmer(
@@ -1143,6 +1207,52 @@ class _ProductDetailsState extends State<ProductDetails>
                             ],
                           ),
                         ),
+                        if (_productDetails?.downloads != null)
+                          Column(
+                            children: [
+                              divider(),
+                              InkWell(
+                                onTap: () async {
+                                  print(_productDetails?.downloads);
+                                  var url = Uri.parse(
+                                      _productDetails?.downloads ?? "");
+                                  print(url);
+                                  launchUrl(url,
+                                      mode: LaunchMode.externalApplication);
+                                },
+                                child: Container(
+                                  color: MyTheme.white,
+                                  height: 48,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      18.0,
+                                      14.0,
+                                      18.0,
+                                      14.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .downloads_ucf,
+                                          style: TextStyle(
+                                              color: MyTheme.dark_font_grey,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Spacer(),
+                                        Image.asset(
+                                          "assets/arrow.png",
+                                          height: 11,
+                                          width: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         divider(),
                         InkWell(
                           onTap: () {
@@ -1199,7 +1309,7 @@ class _ProductDetailsState extends State<ProductDetails>
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProductReviews(id: widget.id);
+                              return ProductReviews(id: _productDetails!.id);
                             })).then((value) {
                               onPopped(value);
                             });
@@ -1235,13 +1345,13 @@ class _ProductDetailsState extends State<ProductDetails>
                           ),
                         ),
                         divider(),
-                        InkWell(
+                        InkWell( 
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/seller-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .seller_policy_ucf,
                               );
@@ -1285,7 +1395,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/return-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .return_policy_ucf,
                               );
@@ -1329,7 +1439,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                 MaterialPageRoute(builder: (context) {
                               return CommonWebviewScreen(
                                 url:
-                                    "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
+                                    "${AppConfig.RAW_BASE_URL_OTHER}/mobile-page/support-policy",
                                 page_name: AppLocalizations.of(context)!
                                     .support_policy_ucf,
                               );
@@ -1444,7 +1554,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         context,
                         MaterialPageRoute(
                             builder: (context) => SellerDetails(
-                                  id: _productDetails!.shop_id,
+                                  slug: _productDetails?.shop_slug ?? "",
                                 )));
                   },
                   child: Padding(
@@ -1589,13 +1699,22 @@ class _ProductDetailsState extends State<ProductDetails>
             mainAxisSize: MainAxisSize.max,
             children: [
               buildQuantityDownButton(),
-              Container(
+              /* Container(
                   width: 36,
                   child: Center(
                       child: Text(
                     _quantity.toString(),
                     style: TextStyle(fontSize: 18, color: MyTheme.dark_grey),
-                  ))),
+                  ))),*/
+              Container(
+                  width: 36,
+                  child: Center(
+                      child: QuantityInputField.show(quantityText,
+                          isDisable: _quantity == 0, onSubmitted: () {
+                    _quantity = int.parse(quantityText.text);
+                    print(_quantity);
+                    fetchAndSetVariantWiseInfo();
+                  }))),
               buildQuantityUpButton()
             ],
           ),
@@ -1611,6 +1730,8 @@ class _ProductDetailsState extends State<ProductDetails>
       ],
     );
   }
+
+  TextEditingController quantityText = TextEditingController(text: "0");
 
   Padding buildVariantShimmers() {
     return Padding(
@@ -1929,56 +2050,50 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   Widget buildWholeSaleQuantityPrice() {
-    return Row(
-      children: [
-        DataTable(
-          columns: [
-            DataColumn(
-                label: Text('Min Qty',
-                    style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
-            DataColumn(
-                label: Text('Max Qty',
-                    style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
-            DataColumn(
-                label: Text('Unit Price',
-                    style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
-          ],
-          rows: List<DataRow>.generate(
-            _productDetails!.wholesale!.length,
-            (index) {
-              return DataRow(cells: <DataCell>[
-                DataCell(
-                  Text(
-                    '${_productDetails!.wholesale![index].minQty.toString()}',
-                    style: TextStyle(
-                        color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    '${_productDetails!.wholesale![index].maxQty.toString()}',
-                    style: TextStyle(
-                        color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    SystemConfig.systemCurrency != null
-                        ? _productDetails!.wholesale![index].price
-                            .toString()
-                            .replaceAll(SystemConfig.systemCurrency!.code!,
-                                SystemConfig.systemCurrency!.symbol!)
-                        : SystemConfig.systemCurrency!.symbol! +
-                            _productDetails!.wholesale![index].price.toString(),
-                    style: TextStyle(
-                        color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
-                  ),
-                ),
-              ]);
-            },
-          ),
-        )
+    return DataTable(
+      // clipBehavior:Clip.antiAliasWithSaveLayer,
+      columnSpacing: DeviceInfo(context).width! * 0.125,
+
+      columns: [
+        DataColumn(
+            label: Text(LangText(context).local.min_qty_ucf,
+                style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
+        DataColumn(
+            label: Text(LangText(context).local.max_qty_ucf,
+                style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
+        DataColumn(
+            label: Text(LangText(context).local.unit_price_ucf,
+                style: TextStyle(fontSize: 12, color: MyTheme.dark_grey))),
       ],
+      rows: List<DataRow>.generate(
+        _productDetails!.wholesale!.length,
+        (index) {
+          return DataRow(cells: <DataCell>[
+            DataCell(
+              Text(
+                '${_productDetails!.wholesale![index].minQty.toString()}',
+                style: TextStyle(
+                    color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
+              ),
+            ),
+            DataCell(
+              Text(
+                '${_productDetails!.wholesale![index].maxQty.toString()}',
+                style: TextStyle(
+                    color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
+              ),
+            ),
+            DataCell(
+              Text(
+                convertPrice(
+                    _productDetails!.wholesale![index].price.toString()),
+                style: TextStyle(
+                    color: Color.fromRGBO(152, 152, 153, 1), fontSize: 12),
+              ),
+            ),
+          ]);
+        },
+      ),
     );
   }
 
@@ -2065,6 +2180,14 @@ class _ProductDetailsState extends State<ProductDetails>
             ),
           ),
         ),
+        Text(
+          "/${_productDetails!.unit}",
+          // _singlePriceString,
+          style: TextStyle(
+              color: MyTheme.accent_color,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600),
+        ),
       ],
     );
   }
@@ -2108,8 +2231,9 @@ class _ProductDetailsState extends State<ProductDetails>
       ],
     );
   }
-
-  Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
+  
+  
+  Widget buildBottomAppBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: MyTheme.white.withOpacity(0.9),
       items: [
@@ -2118,11 +2242,21 @@ class _ProductDetailsState extends State<ProductDetails>
           label: '',
           icon: InkWell(
             onTap: () {
-              onPressAddToCart(context, _addedToCartSnackbar);
+              // onPressBuyNow(context);
+              // onPressBuyNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/buy?type=buy&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Contact Dealer",
+                  );
+                }));    
             },
             child: Container(
               margin: EdgeInsets.only(
-                left: 18,
+                left: 7,
+                right: 7,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -2138,8 +2272,54 @@ class _ProductDetailsState extends State<ProductDetails>
               ),
               height: 50,
               child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.add_to_cart_ucf,
+                child: Text("Buy",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Colors.transparent,
+          label: '',
+          icon: InkWell(
+          
+            onTap: () {
+              // onPressInsureNow(context);
+              // onPressInsureNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url:
+                      "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/insurance?type=insurance&id=${_productDetails!.id}&email=${user_id.$}",
+                        page_name: "Apply for Insurance",
+                  );
+                }));   
+            },
+          
+            child: Container(
+              margin: EdgeInsets.only(
+                left: 0,
+                right: 0,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0),
+                color: MyTheme.accent_color,
+                boxShadow: [
+                  BoxShadow(
+                    color: MyTheme.accent_color_shadow,
+                    blurRadius: 20,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              height: 50,
+              child: Center(
+                child: Text("Insure",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -2152,11 +2332,24 @@ class _ProductDetailsState extends State<ProductDetails>
         BottomNavigationBarItem(
           label: "",
           icon: InkWell(
+           
             onTap: () {
-              onPressBuyNow(context);
+              // onPressLendingNow(context);
+              // onPressLendingNowRoute(context);
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) {
+                  return CommonWebviewScreen(
+                    url: "${AppConfig.RAW_BASE_URL_OTHER}/vehicle/lending?type=lending&id=${_productDetails!.id}&email=${user_id.$}",
+                    page_name: "Apply for Vehicle Loan",
+                  );
+                })); 
             },
+          
             child: Container(
-              margin: EdgeInsets.only(left: 18, right: 18),
+              margin: EdgeInsets.only(
+                left: 7, 
+                right: 7
+              ),
               height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -2171,8 +2364,7 @@ class _ProductDetailsState extends State<ProductDetails>
                 ],
               ),
               child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.buy_now_ucf,
+                child: Text("Lending",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -2182,26 +2374,6 @@ class _ProductDetailsState extends State<ProductDetails>
             ),
           ),
         )
-        /*Container(
-          color: Colors.white.withOpacity(0.95),
-          height: 83,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 18,
-              ),
-
-              SizedBox(
-                width: 14,
-              ),
-
-              SizedBox(
-                width: 18,
-              ),
-            ],
-          ),
-        )*/
       ],
     );
   }
@@ -2267,8 +2439,7 @@ class _ProductDetailsState extends State<ProductDetails>
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return BrandProducts(
-                  id: _productDetails!.brand!.id,
-                  brand_name: _productDetails!.brand!.name,
+                  slug: _productDetails!.brand!.slug!,
                 );
               }));
             },
@@ -2327,8 +2498,7 @@ class _ProductDetailsState extends State<ProductDetails>
         : Container();
   }
 
-  Widget buildExpandableDescription() {
-    print(_productDetails!.description);
+  buildExpandableDescription() {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -2348,6 +2518,11 @@ class _ProductDetailsState extends State<ProductDetails>
                             "document.getElementById('scaled-frame').clientHeight"))
                         .toString(),
                   );
+                  print(webViewHeight);
+                  print(MediaQuery.of(context).devicePixelRatio);
+
+                  // webViewHeight =( webViewHeight / MediaQuery.of(context).devicePixelRatio)+400;
+                  print(webViewHeight);
                 } else {
                   webViewHeight = 50;
                 }
@@ -2434,6 +2609,7 @@ class _ProductDetailsState extends State<ProductDetails>
           itemBuilder: (context, index) {
             return ListProductCard(
                 id: _topProducts[index].id,
+                slug: _topProducts[index].slug,
                 image: _topProducts[index].thumbnail_image,
                 name: _topProducts[index].name,
                 main_price: _topProducts[index].main_price,
@@ -2492,6 +2668,7 @@ class _ProductDetailsState extends State<ProductDetails>
             itemBuilder: (context, index) {
               return MiniProductCard(
                   id: _relatedProducts[index].id,
+                  slug: _relatedProducts[index].slug,
                   image: _relatedProducts[index].thumbnail_image,
                   name: _relatedProducts[index].name,
                   main_price: _relatedProducts[index].main_price,
@@ -2792,39 +2969,22 @@ class _ProductDetailsState extends State<ProductDetails>
 <html>
 
 <head>
-  <title>Title of the document</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="${AppConfig.RAW_BASE_URL}/public/assets/css/vendors.css">
   <style>
   *{
-  margin:0;
-  padding:0;
+  margin:0 !important;
+  padding:0 !important;
   }
-    #wrap {
-      padding: 0;
-      overflow: hidden;
-    }
-    #scaled-frame {
-      zoom: 2;
-      -moz-transform: scale(2);
-      -moz-transform-origin: 0 0;
-      -o-transform: scale(2);
-      -o-transform-origin: 0 0;
-      -webkit-transform: scale(2);
-      -webkit-transform-origin: 0 0;
-    }
-    #scaled-frame {
-      border: 0px;      
-    }
 
-    @media screen and (-webkit-min-device-pixel-ratio:0) {
-      #scaled-frame {
-        zoom: 2;
-      }
-
+    #scaled-frame {
     }
   </style>
 </head>
 
-<body>
+<body id="main_id">
   <div id="scaled-frame">
 $string
   </div>
