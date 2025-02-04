@@ -139,13 +139,13 @@ class ProductRepository {
     
   }
 
-  // Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
-  //   String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
-  //   print("Product Url");
+  Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
+    String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
+    print("Product Url");
 
-    Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
-      String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
-      print(url.toString());
+    // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
+    //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
+    //   print(url.toString());
     final response = await ApiRequest.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
