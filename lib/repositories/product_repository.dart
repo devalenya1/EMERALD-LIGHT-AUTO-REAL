@@ -140,7 +140,7 @@ class ProductRepository {
   }
 
   Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
-    String url = ("${AppConfig.BASE_URL}/products/" + slug.toString());
+    String url = ("${AppConfig.BASE_URL}/my/products/" + slug.toString());
     print("Product Url");
 
     // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
