@@ -2242,7 +2242,7 @@ class _ProductDetailsState extends State<ProductDetails>
           label: '',
           icon: InkWell(
             onTap: () {
-              // onPressBuyNow(context);
+              onPressBuyNow(context);
               // onPressBuyNowRoute(context);
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
@@ -2288,7 +2288,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
           
             onTap: () {
-              // onPressInsureNow(context);
+              onPressInsureNow(context);
               // onPressInsureNowRoute(context);
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
@@ -2334,7 +2334,7 @@ class _ProductDetailsState extends State<ProductDetails>
           icon: InkWell(
            
             onTap: () {
-              // onPressLendingNow(context);
+              onPressLendingNow(context);
               // onPressLendingNowRoute(context);
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) {
