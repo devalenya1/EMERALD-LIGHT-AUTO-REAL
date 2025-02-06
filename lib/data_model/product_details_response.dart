@@ -1,7 +1,7 @@
 // To parse this JSON data, do
 //
 //     final productDetailsResponse = productDetailsResponseFromJson(jsonString);
-// https://app.quicktype.io/
+// https://app.quicktype.io/ productDetailsResponseFromJson
 import 'dart:convert';
 
 ProductDetailsResponse productDetailsResponseFromJson(String str) =>
@@ -177,22 +177,26 @@ class Brand {
   Brand({
     this.id,
     this.name,
+    this.slug,
     this.logo,
   });
 
   int? id;
   String? name;
+  String? slug;
   String? logo;
 
   factory Brand.fromJson(Map<String, dynamic> json) => Brand(
         id: json["id"],
         name: json["name"],
+        slug: json["slug"],
         logo: json["logo"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "slug": slug,
         "logo": logo,
       };
 }

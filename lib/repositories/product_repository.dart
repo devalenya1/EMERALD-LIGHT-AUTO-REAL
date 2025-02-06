@@ -139,20 +139,30 @@ class ProductRepository {
     
   }
 
-  Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
-    String url = ("${AppConfig.BASE_URL}/my/products/" + slug.toString());
-    print("Product Url");
+  // Future<ProductDetailsResponse> getProductDetails({String? slug = ""}) async {
+  //   String url = ("${AppConfig.BASE_URL}/my/products/" + slug.toString());
+  //   print("Product Url");
 
-    // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
-    //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
-    //   print(url.toString());
-    final response = await ApiRequest.get(url: url, headers: {
+  //   // Future<ProductDetailsResponse> getProductDetails({int? id = 0}) async {
+  //   //   String url = ("${AppConfig.BASE_URL}/products/" + id.toString());
+  //   //   print(url.toString());
+  //   final response = await ApiRequest.get(url: url, headers: {
+  //     "App-Language": app_language.$!,
+  //   });
+  //   print(response.body);
+
+  //   return productDetailsResponseFromJson(response.body);
+  // } 
+
+
+  Future<ProductDetailsResponse> getProductDetails({required String slug}) async {
+    String url =
+        ("${AppConfig.BASE_URL}/my/products/$slug");
+    final response = await http.get(url: url, headers: {
       "App-Language": app_language.$!,
     });
-    print(response.body);
-
     return productDetailsResponseFromJson(response.body);
-  } 
+  }
 
 
 
