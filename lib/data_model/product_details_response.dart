@@ -1,5 +1,9 @@
+// To parse this JSON data, do
+//
+//     final productDetailsResponse = productDetailsResponseFromJson(jsonString);
+// https://app.quicktype.io/
 import 'dart:convert';
- 
+
 ProductDetailsResponse productDetailsResponseFromJson(String str) =>
     ProductDetailsResponse.fromJson(json.decode(str));
 
@@ -39,7 +43,6 @@ class DetailedProduct {
     this.added_by,
     this.seller_id,
     this.shop_id,
-    this.shop_slug,
     this.shop_name,
     this.shop_logo,
     this.photos,
@@ -60,7 +63,6 @@ class DetailedProduct {
     this.rating_count,
     this.earn_point,
     this.description,
-    this.downloads,
     this.video_link,
     this.link,
     this.brand,
@@ -73,7 +75,6 @@ class DetailedProduct {
   String? added_by;
   int? seller_id;
   int? shop_id;
-  String? shop_slug;
   String? shop_name;
   String? shop_logo;
   List<Photo>? photos;
@@ -94,9 +95,7 @@ class DetailedProduct {
   int? rating_count;
   int? earn_point;
   String? description;
-  String? downloads;
   String? video_link;
-
   String? link;
   Brand? brand;
   List<Wholesale>? wholesale;
@@ -109,7 +108,6 @@ class DetailedProduct {
         added_by: json["added_by"],
         seller_id: json["seller_id"],
         shop_id: json["shop_id"],
-        shop_slug: json["shop_slug"],
         shop_name: json["shop_name"],
         shop_logo: json["shop_logo"],
         estShippingTime: json["est_shipping_time"],
@@ -134,7 +132,6 @@ class DetailedProduct {
         description: json["description"] == null || json["description"] == ""
             ? "No Description is available"
             : json['description'],
-        downloads: json["downloads"],
         video_link: json["video_link"],
         link: json["link"],
         brand: Brand.fromJson(json["brand"]),
@@ -149,7 +146,6 @@ class DetailedProduct {
         "seller_id": seller_id,
         "shop_id": shop_id,
         "est_shipping_time": estShippingTime,
-        "shop_slug": shop_slug,
         "shop_name": shop_name,
         "shop_logo": shop_logo,
         "photos": List<dynamic>.from(photos!.map((x) => x.toJson())),
@@ -170,7 +166,6 @@ class DetailedProduct {
         "rating_count": rating_count,
         "earn_point": earn_point,
         "description": description,
-        "downloads": downloads,
         "video_link": video_link,
         "link": link,
         "brand": brand!.toJson(),
@@ -181,26 +176,22 @@ class DetailedProduct {
 class Brand {
   Brand({
     this.id,
-    this.slug,
     this.name,
     this.logo,
   });
 
   int? id;
-  String? slug;
   String? name;
   String? logo;
 
   factory Brand.fromJson(Map<String, dynamic> json) => Brand(
         id: json["id"],
-        slug: json["slug"],
         name: json["name"],
         logo: json["logo"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "slug": slug,
         "name": name,
         "logo": logo,
       };
