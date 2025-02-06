@@ -220,7 +220,7 @@ class AuthRepository {
   Future<LoginResponse> getUserByTokenResponse() async {
     // var post_body = jsonEncode({"access_token": "${access_token.$}"});
 
-    String url = ("${AppConfig.BASE_URL}/my/info?access_token=${access_token.$}");
+    String url = ("${AppConfig.BASE_URL}/info?access_token=${access_token.$}");
     if (access_token.$!.isNotEmpty) {
       final response = await ApiRequest.get(url:url,
           headers: {
